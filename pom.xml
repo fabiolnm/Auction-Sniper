@@ -11,5 +11,26 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>com.objogate</groupId>
+  		<artifactId>windowlicker-core</artifactId>
+  		<version>DEV</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.objogate</groupId>
+  		<artifactId>windowlicker-swing</artifactId>
+  		<version>DEV</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.hamcrest</groupId>
+  		<artifactId>hamcrest-all</artifactId>
+  		<version>1.1</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
   </dependencies>
 </project>
