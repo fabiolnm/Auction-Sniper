@@ -27,6 +27,6 @@ public class AuctionSniperEndToEndTest {
 	
 	@After 
 	public void stopApplication() {
-		// application.stop();
+		application.stop();
 	}
 }
