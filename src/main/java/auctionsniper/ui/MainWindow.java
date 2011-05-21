@@ -27,4 +27,8 @@ public class MainWindow extends JFrame {
 		result.setName(SNIPER_STATUS_NAME);
 		return result;
 	}
+
+	public void showStatusLost() {
+		sniperStatus.setText(STATUS_LOST);
+	}
 }

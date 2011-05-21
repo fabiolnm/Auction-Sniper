@@ -22,24 +22,33 @@ public class Main {
 		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 	
 	public static void main(String... args) throws Exception {
-		Main main = new Main();
-		
 		String host = args[ARG_HOSTNAME], 
 			user = args[ARG_USERNAME], 
 			password = args[ARG_PASSWORD],
 			itemId = args[ARG_ITEM_ID];
 
 		XMPPConnection connection = connectTo(host, user, password);
-		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		
+		Main main = new Main();
+		main.joinAuction(connection, itemId);
+	}
+	
+	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		Chat chat = connection.getChatManager().createChat(auctionId, new MessageListener() {
 			public void processMessage(Chat aChat, Message message) {
-				// nothing yet
+				// this method sshould be used when an 
+				// application thread needs to update the GUI
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						ui.showStatusLost();
+					}
+				});
 			}
 		});
 		chat.sendMessage(new Message());
 	}
-	
+
 	private MainWindow ui;
 	
 	public Main() throws Exception {
