@@ -41,7 +41,11 @@ public class FakeAuctionServer {
 			}
 		});
 	}
-	
+
+	public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
+		messageListener.receivesAMessage();
+	}	
+
 	public void stop() {
 		connection.disconnect();
 	}
@@ -56,5 +60,5 @@ public class FakeAuctionServer {
 		public void receivesAMessage() throws InterruptedException {
 			assertThat("Message", messages.poll(5, TimeUnit.SECONDS), is(notNullValue()));
 		}
-	}	
+	}
 }

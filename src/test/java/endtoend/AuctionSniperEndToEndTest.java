@@ -10,11 +10,8 @@ public class AuctionSniperEndToEndTest {
 	@Test
 	public void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
 		auction.startSellingItem(); // Step 1
-		// application.startBiddingIn(auction); // Step 2
-
-		application.startBidding(); // Just setting up Swing and WindowLicker
-		
-		// auction.hasReceivedJoinRequestFromSniper(); // Step 3
+		application.startBiddingIn(auction); // Step 2
+		auction.hasReceivedJoinRequestFromSniper(); // Step 3
 		// auction.announceClosed(); // Step 4
 		// application.showsSniperHasLostAuction(); // Step 5
 	}

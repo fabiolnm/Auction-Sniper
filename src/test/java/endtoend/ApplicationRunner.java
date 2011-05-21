@@ -6,7 +6,7 @@ import auctionsniper.ui.MainWindow;
 public class ApplicationRunner {
 	private AuctionSniperDriver driver;
 	
-	public void startBidding() throws Exception {
+	public void startBiddingIn(FakeAuctionServer auction) throws Exception {
 		Main.main();
 		driver = new AuctionSniperDriver(1000);
 		driver.showsSniperStatus(MainWindow.STATUS_JOINING);
