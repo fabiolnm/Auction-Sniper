@@ -32,5 +32,19 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>org.igniterealtime.smack</groupId>
+  		<artifactId>smack</artifactId>
+  		<version>3.1.0</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.igniterealtime.smack</groupId>
+  		<artifactId>smackx</artifactId>
+  		<version>3.1.0</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
   </dependencies>
 </project>
