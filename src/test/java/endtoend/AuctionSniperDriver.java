@@ -1,8 +1,5 @@
 package endtoend;
 
-import static com.objogate.wl.swing.driver.ComponentDriver.named;
-import static com.objogate.wl.swing.driver.ComponentDriver.showingOnScreen;
-import static com.objogate.wl.swing.driver.JFrameDriver.topLevelFrame;
 import auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
