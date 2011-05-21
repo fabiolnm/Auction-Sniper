@@ -12,8 +12,8 @@ public class AuctionSniperEndToEndTest {
 		auction.startSellingItem(); // Step 1
 		application.startBiddingIn(auction); // Step 2
 		auction.hasReceivedJoinRequestFromSniper(); // Step 3
-		// auction.announceClosed(); // Step 4
-		// application.showsSniperHasLostAuction(); // Step 5
+		auction.announceClosed(); // Step 4
+		application.showsSniperHasLostAuction(); // Step 5
 	}
 	
 	// Additional cleanup

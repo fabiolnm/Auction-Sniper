@@ -9,6 +9,7 @@ public class MainWindow extends JFrame {
 	
 	public static final String SNIPER_STATUS_NAME = "sniper_status";
 	public static final String STATUS_JOINING = "Joining";
+	public static final String STATUS_LOST = "Lost";
 	
 	private final JLabel sniperStatus = createLabel(STATUS_JOINING);
 	
