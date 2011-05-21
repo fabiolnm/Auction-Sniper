@@ -1,9 +1,11 @@
 package endtoend;
 
+import static org.hamcrest.Matchers.equalTo;
 import auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
+import com.objogate.wl.swing.driver.JLabelDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 
 public class AuctionSniperDriver extends JFrameDriver {
@@ -22,5 +24,9 @@ public class AuctionSniperDriver extends JFrameDriver {
 			new AWTEventQueueProber(timeout, 100));
 
 		hasTitle(MainWindow.TITLE);
+	}
+
+	public void showsSniperStatus(String status) {
+		new JLabelDriver(this, named(MainWindow.SNIPER_STATUS_NAME)).hasText(equalTo(status));
 	}
 }
