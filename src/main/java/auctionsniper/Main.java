@@ -25,6 +25,8 @@ public class Main {
 		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 	
 	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
+	public static final String PRICE_FORMAT_MESSAGE = 
+		"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;";
 	
 	public static void main(String... args) throws Exception {
 		String host = args[ARG_HOSTNAME], 
