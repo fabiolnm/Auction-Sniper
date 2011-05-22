@@ -21,6 +21,8 @@ public class Main {
 	public static final String AUCTION_ID_FORMAT =
 		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 	
+	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
+	
 	public static void main(String... args) throws Exception {
 		String host = args[ARG_HOSTNAME], 
 			user = args[ARG_USERNAME], 
@@ -46,7 +48,7 @@ public class Main {
 				});
 			}
 		});
-		chat.sendMessage(new Message());
+		chat.sendMessage(JOIN_COMMAND_FORMAT);
 	}
 
 	private MainWindow ui;

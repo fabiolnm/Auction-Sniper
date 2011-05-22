@@ -45,7 +45,7 @@ public class FakeAuctionServer {
 	}
 
 	public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-		messageListener.receivesAMessage(equalTo("SOLVersion: 1.1; Command: JOIN;"));
+		messageListener.receivesAMessage(equalTo(Main.JOIN_COMMAND_FORMAT));
 	}	
 
 	public void announceClosed() throws XMPPException {
