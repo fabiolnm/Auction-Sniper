@@ -9,7 +9,7 @@
   		<artifactId>junit</artifactId>
   		<version>4.8.2</version>
   		<type>jar</type>
-  		<scope>compile</scope>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>com.objogate</groupId>
@@ -30,7 +30,7 @@
   		<artifactId>hamcrest-all</artifactId>
   		<version>1.1</version>
   		<type>jar</type>
-  		<scope>compile</scope>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.igniterealtime.smack</groupId>
@@ -45,6 +45,13 @@
   		<version>3.1.0</version>
   		<type>jar</type>
   		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.jmock</groupId>
+  		<artifactId>jmock-junit4</artifactId>
+  		<version>2.5.1</version>
+  		<type>jar</type>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
 </project>
