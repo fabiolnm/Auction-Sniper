@@ -68,6 +68,10 @@ public class Main implements AuctionEventListener {
 		});
 	}	
 
+	public void currentPrice(int currentPrice, int increment) {
+		// TODO Auto-generated method stub
+	}
+	
 	private void disconnectWhenUiCloses(final XMPPConnection connection) {
 		ui.addWindowListener(new WindowAdapter() {
 		   @Override 

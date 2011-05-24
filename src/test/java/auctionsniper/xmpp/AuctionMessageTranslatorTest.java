@@ -26,4 +26,16 @@ public class AuctionMessageTranslatorTest {
 		message.setBody("SOLVersion: 1.1; Event: CLOSE;");
 		translator.processMessage(UNUSED_CHAT, message);
 	}
+	
+	@Test
+	public void notifiesBidDetailsWhenCurrentPriceMessageReceived() {
+		context.checking(new Expectations() {{
+			exactly(1).of(listener).currentPrice(192, 7);
+		}});
+		String priceMessage = 
+			"SOLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;";
+		Message message = new Message();
+		message.setBody(priceMessage);
+		translator.processMessage(UNUSED_CHAT, message);
+	}
 }
