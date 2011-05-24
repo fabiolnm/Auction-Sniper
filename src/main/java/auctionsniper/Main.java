@@ -23,9 +23,10 @@ public class Main implements AuctionEventListener {
 	public static final String AUCTION_ID_FORMAT =
 		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 	
-	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
+	public static final String JOIN_FORMAT_MESSAGE = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String PRICE_FORMAT_MESSAGE = 
 		"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;";
+	public static final String CLOSE_FORMAT_MESSAGE = "SOLVersion: 1.1; Event: CLOSE;";
 	
 	public static void main(String... args) throws Exception {
 		String host = args[ARG_HOSTNAME], 
@@ -57,7 +58,7 @@ public class Main implements AuctionEventListener {
 		disconnectWhenUiCloses(connection);
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		Chat chat = connection.getChatManager().createChat(auctionId, new AuctionMessageTranslator(this));
-		chat.sendMessage(JOIN_COMMAND_FORMAT);
+		chat.sendMessage(JOIN_FORMAT_MESSAGE);
 	}
 	
 	public void auctionClosed() {
