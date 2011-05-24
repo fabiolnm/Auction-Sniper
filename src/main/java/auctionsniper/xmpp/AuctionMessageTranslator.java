@@ -14,7 +14,6 @@ public class AuctionMessageTranslator implements MessageListener {
 	}
 
 	public void processMessage(Chat chat, Message message) {
-		// TODO Auto-generated method stub
-		
+		listener.auctionClosed();
 	}
 }

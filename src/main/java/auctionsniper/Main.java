@@ -6,14 +6,13 @@ import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
 
 import auctionsniper.ui.MainWindow;
+import auctionsniper.xmpp.AuctionMessageTranslator;
 
-public class Main {
+public class Main implements AuctionEventListener {
 	private static final int ARG_HOSTNAME = 0;
 	private static final int ARG_USERNAME = 1;
 	private static final int ARG_PASSWORD = 2;
@@ -57,19 +56,17 @@ public class Main {
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
 		disconnectWhenUiCloses(connection);
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
-		Chat chat = connection.getChatManager().createChat(auctionId, new MessageListener() {
-			public void processMessage(Chat aChat, Message message) {
-				// this method sshould be used when an 
-				// application thread needs to update the GUI
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						ui.showStatusLost();
-					}
-				});
-			}
-		});
+		Chat chat = connection.getChatManager().createChat(auctionId, new AuctionMessageTranslator(this));
 		chat.sendMessage(JOIN_COMMAND_FORMAT);
 	}
+	
+	public void auctionClosed() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				ui.showStatusLost();
+			}
+		});
+	}	
 
 	private void disconnectWhenUiCloses(final XMPPConnection connection) {
 		ui.addWindowListener(new WindowAdapter() {
@@ -86,5 +83,5 @@ public class Main {
 		connection.connect();
 		connection.login(username, password, AUCTION_RESOURCE);
 		return connection;
-	}	
+	}
 }
