@@ -11,6 +11,7 @@ import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.ui.MainWindow;
 import auctionsniper.xmpp.AuctionMessageTranslator;
+import auctionsniper.xmpp.XMPPAuction;
 
 public class Main implements SniperListener {
 	private static final int ARG_HOSTNAME = 0;
@@ -23,10 +24,10 @@ public class Main implements SniperListener {
 	public static final String AUCTION_ID_FORMAT =
 		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 	
-	public static final String JOIN_FORMAT_MESSAGE = "SOLVersion: 1.1; Command: JOIN;";
+	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String PRICE_FORMAT_MESSAGE = 
 		"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;";
-	public static final String BID_FORMAT_MESSAGE = "SOLVersion: 1.1; Command: BID; Price: %s;";
+	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %s;";
 	public static final String CLOSE_FORMAT_MESSAGE = "SOLVersion: 1.1; Event: CLOSE;";
 	
 	public static void main(String... args) throws Exception {
@@ -60,18 +61,9 @@ public class Main implements SniperListener {
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		final Chat chat = connection.getChatManager().createChat(auctionId, null);
 		
-		Auction auction = new Auction() {
-			public void bid(int amount) {
-				try {
-					chat.sendMessage(String.format(BID_FORMAT_MESSAGE, amount));
-				} catch (XMPPException e) {
-					e.printStackTrace();
-				}
-			}
-		};
+		XMPPAuction auction = new XMPPAuction(chat);
 		chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
-		
-		chat.sendMessage(JOIN_FORMAT_MESSAGE);
+		auction.join();
 	}
 	
 	public void sniperBidding() {
