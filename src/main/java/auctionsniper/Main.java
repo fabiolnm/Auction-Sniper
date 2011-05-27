@@ -41,6 +41,7 @@ public class Main implements SniperListener {
 	}
 	
 	private MainWindow ui;
+	private Auction auction = null;
 	
 	public Main() throws Exception {
 		startUserInterface();
@@ -58,7 +59,7 @@ public class Main implements SniperListener {
 		disconnectWhenUiCloses(connection);
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		Chat chat = connection.getChatManager().createChat(auctionId, 
-				new AuctionMessageTranslator(new AuctionSniper(this)));
+				new AuctionMessageTranslator(new AuctionSniper(auction, this)));
 		chat.sendMessage(JOIN_FORMAT_MESSAGE);
 	}
 	
