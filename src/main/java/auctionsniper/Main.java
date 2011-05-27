@@ -13,7 +13,7 @@ import auctionsniper.ui.MainWindow;
 import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.xmpp.XMPPAuction;
 
-public class Main implements SniperListener {
+public class Main {
 	private static final int ARG_HOSTNAME = 0;
 	private static final int ARG_USERNAME = 1;
 	private static final int ARG_PASSWORD = 2;
@@ -62,24 +62,9 @@ public class Main implements SniperListener {
 		final Chat chat = connection.getChatManager().createChat(auctionId, null);
 		
 		XMPPAuction auction = new XMPPAuction(chat);
-		chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
+		AuctionSniper sniper = new AuctionSniper(auction, new SniperStateDisplayer());
+		chat.addMessageListener(new AuctionMessageTranslator(sniper));
 		auction.join();
-	}
-	
-	public void sniperBidding() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				ui.showStatusBidding();
-			}
-		});
-	}
-	
-	public void sniperLost() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				ui.showStatusLost();
-			}
-		});
 	}
 	
 	private void disconnectWhenUiCloses(final XMPPConnection connection) {
@@ -97,5 +82,23 @@ public class Main implements SniperListener {
 		connection.connect();
 		connection.login(username, password, AUCTION_RESOURCE);
 		return connection;
+	}
+	
+	class SniperStateDisplayer implements SniperListener {
+		public void sniperBidding() {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					ui.showStatusBidding();
+				}
+			});
+		}
+		
+		public void sniperLost() {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					ui.showStatusLost();
+				}
+			});
+		}
 	}
 }
