@@ -62,6 +62,11 @@ public class Main implements SniperListener {
 		chat.sendMessage(JOIN_FORMAT_MESSAGE);
 	}
 	
+	public void sniperBidding() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void sniperLost() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
