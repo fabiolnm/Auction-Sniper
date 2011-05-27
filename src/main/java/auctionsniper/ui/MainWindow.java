@@ -32,4 +32,8 @@ public class MainWindow extends JFrame {
 	public void showStatusLost() {
 		sniperStatus.setText(STATUS_LOST);
 	}
+
+	public void showStatusBidding() {
+		sniperStatus.setText(STATUS_BIDDING);
+	}
 }

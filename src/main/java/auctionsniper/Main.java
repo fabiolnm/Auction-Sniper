@@ -26,6 +26,7 @@ public class Main implements SniperListener {
 	public static final String JOIN_FORMAT_MESSAGE = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String PRICE_FORMAT_MESSAGE = 
 		"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;";
+	public static final String BID_FORMAT_MESSAGE = "SOLVersion: 1.1; Command: BID; Price: %s;";
 	public static final String CLOSE_FORMAT_MESSAGE = "SOLVersion: 1.1; Event: CLOSE;";
 	
 	public static void main(String... args) throws Exception {
@@ -41,7 +42,6 @@ public class Main implements SniperListener {
 	}
 	
 	private MainWindow ui;
-	private Auction auction = null;
 	
 	public Main() throws Exception {
 		startUserInterface();
@@ -58,14 +58,28 @@ public class Main implements SniperListener {
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
 		disconnectWhenUiCloses(connection);
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
-		Chat chat = connection.getChatManager().createChat(auctionId, 
-				new AuctionMessageTranslator(new AuctionSniper(auction, this)));
+		final Chat chat = connection.getChatManager().createChat(auctionId, null);
+		
+		Auction auction = new Auction() {
+			public void bid(int amount) {
+				try {
+					chat.sendMessage(String.format(BID_FORMAT_MESSAGE, amount));
+				} catch (XMPPException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
+		
 		chat.sendMessage(JOIN_FORMAT_MESSAGE);
 	}
 	
 	public void sniperBidding() {
-		// TODO Auto-generated method stub
-		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				ui.showStatusBidding();
+			}
+		});
 	}
 	
 	public void sniperLost() {
