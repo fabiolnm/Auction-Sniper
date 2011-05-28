@@ -10,9 +10,11 @@ import auctionsniper.AuctionEventListener;
 import auctionsniper.AuctionEventListener.PriceSource;
 
 public class AuctionMessageTranslator implements MessageListener {
+	private final String sniperId;
 	private final AuctionEventListener listener;
 
-	public AuctionMessageTranslator(AuctionEventListener listener) {
+	public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+		this.sniperId = sniperId;
 		this.listener = listener;
 	}
 
@@ -22,7 +24,7 @@ public class AuctionMessageTranslator implements MessageListener {
 		if ("CLOSE".equals(eventType))
 			listener.auctionClosed();
 		else if ("PRICE".equals(eventType))
-			listener.currentPrice(event.currentPrice(), event.increment(), PriceSource.FromOtherBidder);
+			listener.currentPrice(event.currentPrice(), event.increment(), event.isFrom(sniperId));
 	}
 	
 	private static class AuctionEvent {
@@ -49,6 +51,14 @@ public class AuctionMessageTranslator implements MessageListener {
 
 		public int increment() {
 			return getInt("Increment");
+		}
+
+		public String bidder() {
+			return get("Bidder");
+		}
+
+		public PriceSource isFrom(String sniperId) {
+			return bidder().equals(sniperId) ? PriceSource.FromSniper :	PriceSource.FromOtherBidder;
 		}
 
 		private int getInt(String fieldName) {
