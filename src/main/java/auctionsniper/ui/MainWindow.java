@@ -2,6 +2,7 @@ package auctionsniper.ui;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 public class MainWindow extends JFrame {
 	public static final String NAME = "Auction Sniper Main";
@@ -32,10 +33,22 @@ public class MainWindow extends JFrame {
 	}
 
 	public void showStatusLost() {
-		sniperStatus.setText(STATUS_LOST);
+		showStatus(STATUS_LOST);
 	}
 
 	public void showStatusBidding() {
-		sniperStatus.setText(STATUS_BIDDING);
+		showStatus(STATUS_BIDDING);
+	}
+
+	public void showStatusWinning() {
+		showStatus(STATUS_WINNING);
+	}
+	
+	private void showStatus(final String status) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				sniperStatus.setText(status);
+			}
+		});
 	}
 }

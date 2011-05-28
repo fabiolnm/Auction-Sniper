@@ -86,24 +86,15 @@ public class Main {
 	
 	class SniperStateDisplayer implements SniperListener {
 		public void sniperBidding() {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					ui.showStatusBidding();
-				}
-			});
+			ui.showStatusBidding();
 		}
 
 		public void sniperWinning() {
-			// TODO Auto-generated method stub
-			
+			ui.showStatusWinning();
 		}
 		
 		public void sniperLost() {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					ui.showStatusLost();
-				}
-			});
+			ui.showStatusLost();
 		}
 	}
 }
