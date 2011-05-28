@@ -48,6 +48,12 @@ public class FakeAuctionServer {
 		messageListener.receivesAMessage(equalTo(Main.JOIN_COMMAND_FORMAT));
 	}	
 
+	public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+		assertThat(currentChat.getParticipant(), equalTo(sniperId));
+		String bidMessage = String.format(Main.BID_COMMAND_FORMAT, bid);
+		messageListener.receivesAMessage(equalTo(bidMessage));
+	}
+
 	public void reportPrice(int price, int increment, String bidder) throws XMPPException {
 		currentChat.sendMessage(String.format(Main.PRICE_FORMAT_MESSAGE, price, increment, bidder));
 	}
