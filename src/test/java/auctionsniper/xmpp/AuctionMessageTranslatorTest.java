@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import auctionsniper.AuctionEventListener;
+import auctionsniper.AuctionEventListener.PriceSource;
 
 @RunWith(JMock.class)
 public class AuctionMessageTranslatorTest {
@@ -28,9 +29,9 @@ public class AuctionMessageTranslatorTest {
 	}
 	
 	@Test
-	public void notifiesBidDetailsWhenCurrentPriceMessageReceived() {
+	public void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromOtherBidder() {
 		context.checking(new Expectations() {{
-			exactly(1).of(listener).currentPrice(192, 7);
+			exactly(1).of(listener).currentPrice(192, 7, PriceSource.FromOtherBidder);
 		}});
 		String priceMessage = 
 			"SOLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;";
