@@ -8,6 +8,8 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import endtoend.ApplicationRunner;
+
 import auctionsniper.AuctionEventListener;
 import auctionsniper.AuctionEventListener.PriceSource;
 
@@ -39,4 +41,16 @@ public class AuctionMessageTranslatorTest {
 		message.setBody(priceMessage);
 		translator.processMessage(UNUSED_CHAT, message);
 	}
+	
+	@Test 
+	public void	notifiesBidDetailsWhenCurrentPriceMessageReceivedFromSniper() {
+		context.checking(new Expectations() {{
+			exactly(1).of(listener).currentPrice(234, 5, PriceSource.FromSniper);
+		}});
+		String sniperBidMessage = 
+			"SOLVersion: 1.1; Event: PRICE; CurrentPrice: 234; Increment: 5; Bidder: %s;";
+		Message message = new Message();
+		message.setBody(String.format(sniperBidMessage, ApplicationRunner.SNIPER_ID));
+		translator.processMessage(UNUSED_CHAT, message);
+	}	
 }
