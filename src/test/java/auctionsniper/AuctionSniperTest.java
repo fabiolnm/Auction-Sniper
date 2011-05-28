@@ -6,6 +6,8 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import auctionsniper.AuctionEventListener.PriceSource;
+
 @RunWith(JMock.class)
 public class AuctionSniperTest {
 	private final Mockery context = new Mockery();
@@ -23,13 +25,21 @@ public class AuctionSniperTest {
 	}
 	
 	@Test
-	public void bidsHigherAndReportsBiddingWhenNewPriceArrives() {
+	public void bidsHigherAndReportsBiddingWhenNewPriceArrivesFromOtherBidder() {
 		final int price = 1001;
 		final int increment = 25;
 		context.checking(new Expectations() {{
 			one(auction).bid(price + increment);
 			atLeast(1).of(sniperListener).sniperBidding();
 		}});
-		sniper.currentPrice(price, increment);
+		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
+	}
+	
+	@Test 
+	public void reportsIsWinningWhenCurrentPriceComesFromSniper() {
+		context.checking(new Expectations() {{
+			atLeast(1).of(sniperListener).sniperWinning();
+		}});
+		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 	}
 }

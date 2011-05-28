@@ -92,6 +92,11 @@ public class Main {
 				}
 			});
 		}
+
+		public void sniperWinning() {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		public void sniperLost() {
 			SwingUtilities.invokeLater(new Runnable() {
