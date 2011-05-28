@@ -43,7 +43,11 @@ public class MainWindow extends JFrame {
 	public void showStatusWinning() {
 		showStatus(STATUS_WINNING);
 	}
-	
+
+	public void showStatusWon() {
+		showStatus(STATUS_WON);
+	}
+
 	private void showStatus(final String status) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

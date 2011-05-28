@@ -96,5 +96,9 @@ public class Main {
 		public void sniperLost() {
 			ui.showStatusLost();
 		}
+
+		public void sniperWon() {
+			ui.showStatusWon();
+		}
 	}
 }
