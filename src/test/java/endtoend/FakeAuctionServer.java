@@ -44,11 +44,12 @@ public class FakeAuctionServer {
 		});
 	}
 
-	public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
+	public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
+		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 		messageListener.receivesAMessage(equalTo(Main.JOIN_COMMAND_FORMAT));
 	}	
 
-	public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+	public void hasReceivedBidFrom(int bid, String sniperId) throws InterruptedException {
 		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 		String bidMessage = String.format(Main.BID_COMMAND_FORMAT, bid);
 		messageListener.receivesAMessage(equalTo(bidMessage));
