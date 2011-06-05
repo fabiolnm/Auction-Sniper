@@ -39,17 +39,13 @@ public class MainWindow extends JFrame {
 		return table;
 	}
 
-	public void showState(SniperSnapshot state) {
-		sniperTable.setValueAt(state.itemId, 0, 0);
-		sniperTable.setValueAt(state.lastPrice, 0, 1);
-		sniperTable.setValueAt(state.lastBid, 0, 2);
-		showStatus(STATUS_TEXT[state.status.ordinal()]);
-	}
-	
-	private void showStatus(final String status) {
+	public void showState(final SniperSnapshot state) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				sniperTable.setValueAt(status, 0, 3);
+				sniperTable.setValueAt(state.itemId, 0, 0);
+				sniperTable.setValueAt(state.lastPrice, 0, 1);
+				sniperTable.setValueAt(state.lastBid, 0, 2);
+				sniperTable.setValueAt(STATUS_TEXT[state.status.ordinal()], 0, 3);
 			}
 		});
 	}
