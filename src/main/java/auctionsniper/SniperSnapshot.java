@@ -4,14 +4,20 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class SniperState {
+public class SniperSnapshot {
 	public final String itemId;
 	public final int lastPrice, lastBid;
+	public final SniperStatus status;
 	
-	public SniperState(String itemId, int lastPrice, int lastBid) {
+	public SniperSnapshot(String itemId) {
+		this(itemId, 0, 0, SniperStatus.JOINING);
+	}
+	
+	public SniperSnapshot(String itemId, int lastPrice, int lastBid, SniperStatus status) {
 		this.itemId = itemId;
 		this.lastPrice = lastPrice;
 		this.lastBid = lastBid;
+		this.status = status;
 	}
 
 	@Override

@@ -4,18 +4,23 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
-import auctionsniper.SniperState;
+import auctionsniper.SniperSnapshot;
 
 public class MainWindow extends JFrame {
 	public static final String NAME = "Auction Sniper Main";
 	public static final String TITLE = "Auction Sniper";
 	
 	public static final String SNIPER_TABLE_NAME = "sniper_table";
+	
 	public static final String STATUS_JOINING = "Joining";
 	public static final String STATUS_LOST = "Lost";
 	public static final String STATUS_BIDDING = "Bidding";
 	public static final String STATUS_WINNING = "Winning";
 	public static final String STATUS_WON = "Won";
+	
+	public static final String[] STATUS_TEXT = {
+		STATUS_JOINING, STATUS_BIDDING, STATUS_WINNING, STATUS_WON, STATUS_LOST
+	};
 	
 	private final JTable sniperTable = createSniperTable();
 	
@@ -35,33 +40,24 @@ public class MainWindow extends JFrame {
 	}
 
 	public void joinAuction(String itemId) {
-		int initialPrice = 0, initialBid = 0;
-		sniperTable.setValueAt(itemId, 0, 0);
-		sniperTable.setValueAt(initialPrice, 0, 1);
-		sniperTable.setValueAt(initialBid, 0, 2);
-		sniperTable.setValueAt(STATUS_JOINING, 0, 3);
+		showState(new SniperSnapshot(itemId));
 	}
 
-	public void showStatusLost() {
-		showStatus(STATUS_LOST);
-	}
-
-	public void showStatusBidding(SniperState state) {
+	public void showState(SniperSnapshot state) {
 		sniperTable.setValueAt(state.itemId, 0, 0);
 		sniperTable.setValueAt(state.lastPrice, 0, 1);
 		sniperTable.setValueAt(state.lastBid, 0, 2);
-		showStatus(STATUS_BIDDING);
-	}
-
-	public void showStatusWinning(SniperState state) {
-		sniperTable.setValueAt(state.lastPrice, 0, 1);
-		showStatus(STATUS_WINNING);
+		showStatus(STATUS_TEXT[state.status.ordinal()]);
 	}
 
 	public void showStatusWon() {
 		showStatus(STATUS_WON);
 	}
 
+	public void showStatusLost() {
+		showStatus(STATUS_LOST);
+	}
+	
 	private void showStatus(final String status) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

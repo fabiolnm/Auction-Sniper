@@ -34,7 +34,8 @@ public class AuctionSniperTest {
 		context.checking(new Expectations() {{
 			ignoring(auction);
 			
-			allowing(sniperListener).sniperBidding(new SniperState(ITEM_ID, price, bid));
+			allowing(sniperListener).sniperStateChanged(
+					new SniperSnapshot(ITEM_ID, price, bid, SniperStatus.BIDDING));
 			then(sniperState.is("bidding"));
 			
 			atLeast(1).of(sniperListener).sniperLost();
@@ -49,7 +50,8 @@ public class AuctionSniperTest {
 		final int price = 1001, increment = 25, bid = price + increment;
 		context.checking(new Expectations() {{
 			one(auction).bid(price + increment);
-			atLeast(1).of(sniperListener).sniperBidding(new SniperState(ITEM_ID, price, bid));
+			atLeast(1).of(sniperListener).sniperStateChanged(
+					new SniperSnapshot(ITEM_ID, price, bid, SniperStatus.BIDDING));
 		}});
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
 	}
@@ -57,7 +59,8 @@ public class AuctionSniperTest {
 	@Test 
 	public void reportsIsWinningWhenCurrentPriceComesFromSniper() {
 		context.checking(new Expectations() {{
-			atLeast(1).of(sniperListener).sniperWinning(new SniperState(ITEM_ID, 123, 123));
+			atLeast(1).of(sniperListener).sniperStateChanged(
+					new SniperSnapshot(ITEM_ID, 123, 123, SniperStatus.WINNING));
 		}});
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 	}
@@ -67,7 +70,8 @@ public class AuctionSniperTest {
 		context.checking(new Expectations() {{
 			ignoring(auction);
 			
-			allowing(sniperListener).sniperWinning(new SniperState(ITEM_ID, 123, 123)); 
+			allowing(sniperListener).sniperStateChanged(
+					new SniperSnapshot(ITEM_ID, 123, 123, SniperStatus.WINNING)); 
 			then(sniperState.is("winning"));
 			
 			atLeast(1).of(sniperListener).sniperWon(); 
