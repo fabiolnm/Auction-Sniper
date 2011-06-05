@@ -27,10 +27,17 @@ public class MainWindow extends JFrame {
 	}
 	
 	private JTable createSniperTable() {
-		JTable table = new JTable(1,1);
+		JTable table = new JTable(1,4);
 		table.setName(SNIPER_TABLE_NAME);
-		table.setValueAt(STATUS_JOINING, 0, 0);
 		return table;
+	}
+
+	public void joinAuction(String itemId) {
+		int initialPrice = 0, initialBid = 0;
+		sniperTable.setValueAt(itemId, 0, 0);
+		sniperTable.setValueAt(initialPrice, 0, 1);
+		sniperTable.setValueAt(initialBid, 0, 2);
+		sniperTable.setValueAt(STATUS_JOINING, 0, 3);
 	}
 
 	public void showStatusLost() {
@@ -52,7 +59,7 @@ public class MainWindow extends JFrame {
 	private void showStatus(final String status) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				sniperTable.setValueAt(status, 0, 0);
+				sniperTable.setValueAt(status, 0, 3);
 			}
 		});
 	}
