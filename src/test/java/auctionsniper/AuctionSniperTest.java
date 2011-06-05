@@ -23,22 +23,22 @@ public class AuctionSniperTest {
 	@Test
 	public void reportsLostWhenAuctionClosesImmediately() {
 		context.checking(new Expectations() {{
-			one(sniperListener).sniperLost();
+			one(sniperListener).sniperStateChanged(SniperSnapshot.joining(ITEM_ID).closed());
 		}});
 		sniper.auctionClosed();
 	}
 	
 	@Test 
 	public void	reportsLostIfAuctionClosesWhenBidding() {
-		final SniperSnapshot state = SniperSnapshot.joining(ITEM_ID);
 		final int price = 123, increment = 45, bid = price + increment; 
 		context.checking(new Expectations() {{
 			ignoring(auction);
 			
-			allowing(sniperListener).sniperStateChanged(state.bidding(price, bid));
+			SniperSnapshot state = SniperSnapshot.joining(ITEM_ID).bidding(price, bid);
+			allowing(sniperListener).sniperStateChanged(state);
 			then(sniperState.is("bidding"));
 			
-			atLeast(1).of(sniperListener).sniperLost();
+			atLeast(1).of(sniperListener).sniperStateChanged(state.closed());
 			when(sniperState.is("bidding"));
 		}});
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
@@ -67,14 +67,14 @@ public class AuctionSniperTest {
 	
 	@Test 
 	public void reportsWonIfAuctionClosesWhenWinning() {
-		final SniperSnapshot state = SniperSnapshot.joining(ITEM_ID);
 		context.checking(new Expectations() {{
 			ignoring(auction);
 			
+			final SniperSnapshot state = SniperSnapshot.joining(ITEM_ID).winning(123);
 			allowing(sniperListener).sniperStateChanged(state.winning(123)); 
 			then(sniperState.is("winning"));
 			
-			atLeast(1).of(sniperListener).sniperWon(); 
+			atLeast(1).of(sniperListener).sniperStateChanged(state.closed()); 
 			when(sniperState.is("winning"));
 		}});
 		

@@ -19,7 +19,7 @@ public class MainWindow extends JFrame {
 	public static final String STATUS_WON = "Won";
 	
 	public static final String[] STATUS_TEXT = {
-		STATUS_JOINING, STATUS_BIDDING, STATUS_WINNING, STATUS_WON, STATUS_LOST
+		STATUS_JOINING, STATUS_BIDDING, STATUS_WINNING, STATUS_LOST, STATUS_WON
 	};
 	
 	private final JTable sniperTable = createSniperTable();
@@ -44,14 +44,6 @@ public class MainWindow extends JFrame {
 		sniperTable.setValueAt(state.lastPrice, 0, 1);
 		sniperTable.setValueAt(state.lastBid, 0, 2);
 		showStatus(STATUS_TEXT[state.status.ordinal()]);
-	}
-
-	public void showStatusWon() {
-		showStatus(STATUS_WON);
-	}
-
-	public void showStatusLost() {
-		showStatus(STATUS_LOST);
 	}
 	
 	private void showStatus(final String status) {

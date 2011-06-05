@@ -28,6 +28,10 @@ public class SniperSnapshot {
 		return new SniperSnapshot(itemId, price, price, SniperStatus.WINNING);
 	}
 
+	public SniperSnapshot closed() {
+		return new SniperSnapshot(itemId, lastPrice, lastBid, status.whenAuctionClosed());
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

@@ -89,13 +89,5 @@ public class Main {
 		public void sniperStateChanged(SniperSnapshot state) {
 			ui.showState(state);
 		}
-		
-		public void sniperLost() {
-			ui.showStatusLost();
-		}
-
-		public void sniperWon() {
-			ui.showStatusWon();
-		}
 	}
 }
