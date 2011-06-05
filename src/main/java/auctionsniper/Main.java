@@ -90,8 +90,8 @@ public class Main {
 			ui.showStatusBidding(state);
 		}
 
-		public void sniperWinning() {
-			ui.showStatusWinning();
+		public void sniperWinning(SniperState state) {
+			ui.showStatusWinning(state);
 		}
 		
 		public void sniperLost() {

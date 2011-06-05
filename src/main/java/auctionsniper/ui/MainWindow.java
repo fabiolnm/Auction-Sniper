@@ -53,7 +53,8 @@ public class MainWindow extends JFrame {
 		showStatus(STATUS_BIDDING);
 	}
 
-	public void showStatusWinning() {
+	public void showStatusWinning(SniperState state) {
+		sniperTable.setValueAt(state.lastPrice, 0, 1);
 		showStatus(STATUS_WINNING);
 	}
 
