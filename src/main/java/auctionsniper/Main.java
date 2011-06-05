@@ -87,7 +87,7 @@ public class Main {
 	
 	class SniperStateDisplayer implements SniperListener {
 		public void sniperBidding(SniperState state) {
-			ui.showStatusBidding();
+			ui.showStatusBidding(state);
 		}
 
 		public void sniperWinning() {

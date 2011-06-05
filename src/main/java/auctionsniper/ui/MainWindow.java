@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import auctionsniper.SniperState;
+
 public class MainWindow extends JFrame {
 	public static final String NAME = "Auction Sniper Main";
 	public static final String TITLE = "Auction Sniper";
@@ -44,7 +46,10 @@ public class MainWindow extends JFrame {
 		showStatus(STATUS_LOST);
 	}
 
-	public void showStatusBidding() {
+	public void showStatusBidding(SniperState state) {
+		sniperTable.setValueAt(state.itemId, 0, 0);
+		sniperTable.setValueAt(state.lastPrice, 0, 1);
+		sniperTable.setValueAt(state.lastBid, 0, 2);
 		showStatus(STATUS_BIDDING);
 	}
 
