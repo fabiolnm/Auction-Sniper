@@ -1,6 +1,9 @@
 package auctionsniper.ui;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
@@ -27,7 +30,7 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		super(TITLE);
 		setName(NAME);
-		add(sniperTable);
+		add(new JScrollPane(sniperTable));
 		pack(); // fit to prefered size
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
