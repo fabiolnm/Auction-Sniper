@@ -57,7 +57,7 @@ public class Main {
 	}
 
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
-		ui.joinAuction(itemId);
+		ui.showState(SniperSnapshot.joining(itemId));
 		disconnectWhenUiCloses(connection);
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		final Chat chat = connection.getChatManager().createChat(auctionId, null);

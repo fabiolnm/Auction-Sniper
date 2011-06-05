@@ -14,7 +14,7 @@ public class ApplicationRunner {
 	public void startBiddingIn(FakeAuctionServer auction) throws Exception {
 		Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.itemId);
 		
-		driver = new AuctionSniperDriver(10000);
+		driver = new AuctionSniperDriver(1000);
 		driver.showsSniperStatus(auction.itemId, 0, 0, MainWindow.STATUS_JOINING);
 	}
 

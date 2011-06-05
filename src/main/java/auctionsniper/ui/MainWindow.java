@@ -39,10 +39,6 @@ public class MainWindow extends JFrame {
 		return table;
 	}
 
-	public void joinAuction(String itemId) {
-		showState(new SniperSnapshot(itemId));
-	}
-
 	public void showState(SniperSnapshot state) {
 		sniperTable.setValueAt(state.itemId, 0, 0);
 		sniperTable.setValueAt(state.lastPrice, 0, 1);

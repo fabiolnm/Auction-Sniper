@@ -30,12 +30,12 @@ public class AuctionSniperTest {
 	
 	@Test 
 	public void	reportsLostIfAuctionClosesWhenBidding() {
+		final SniperSnapshot state = SniperSnapshot.joining(ITEM_ID);
 		final int price = 123, increment = 45, bid = price + increment; 
 		context.checking(new Expectations() {{
 			ignoring(auction);
 			
-			allowing(sniperListener).sniperStateChanged(
-					new SniperSnapshot(ITEM_ID, price, bid, SniperStatus.BIDDING));
+			allowing(sniperListener).sniperStateChanged(state.bidding(price, bid));
 			then(sniperState.is("bidding"));
 			
 			atLeast(1).of(sniperListener).sniperLost();
@@ -47,31 +47,31 @@ public class AuctionSniperTest {
 	
 	@Test
 	public void bidsHigherAndReportsBiddingWhenNewPriceArrivesFromOtherBidder() {
+		final SniperSnapshot state = SniperSnapshot.joining(ITEM_ID);
 		final int price = 1001, increment = 25, bid = price + increment;
 		context.checking(new Expectations() {{
 			one(auction).bid(price + increment);
-			atLeast(1).of(sniperListener).sniperStateChanged(
-					new SniperSnapshot(ITEM_ID, price, bid, SniperStatus.BIDDING));
+			atLeast(1).of(sniperListener).sniperStateChanged(state.bidding(price, bid));
 		}});
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
 	}
 	
 	@Test 
 	public void reportsIsWinningWhenCurrentPriceComesFromSniper() {
+		final SniperSnapshot state = SniperSnapshot.joining(ITEM_ID);
 		context.checking(new Expectations() {{
-			atLeast(1).of(sniperListener).sniperStateChanged(
-					new SniperSnapshot(ITEM_ID, 123, 123, SniperStatus.WINNING));
+			atLeast(1).of(sniperListener).sniperStateChanged(state.winning(123));
 		}});
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 	}
 	
 	@Test 
 	public void reportsWonIfAuctionClosesWhenWinning() {
+		final SniperSnapshot state = SniperSnapshot.joining(ITEM_ID);
 		context.checking(new Expectations() {{
 			ignoring(auction);
 			
-			allowing(sniperListener).sniperStateChanged(
-					new SniperSnapshot(ITEM_ID, 123, 123, SniperStatus.WINNING)); 
+			allowing(sniperListener).sniperStateChanged(state.winning(123)); 
 			then(sniperState.is("winning"));
 			
 			atLeast(1).of(sniperListener).sniperWon(); 
