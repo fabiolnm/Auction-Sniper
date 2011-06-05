@@ -1,5 +1,7 @@
 package auctionsniper;
 
+import auctionsniper.util.Defect;
+
 public enum SniperStatus {
 	JOINING {
 		@Override
@@ -22,6 +24,6 @@ public enum SniperStatus {
 	LOST, WON;
 
 	public SniperStatus whenAuctionClosed() {
-		return null;
+		throw new Defect("Auction is already closed");
 	}
 }
