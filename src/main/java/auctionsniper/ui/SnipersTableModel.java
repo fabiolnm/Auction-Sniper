@@ -3,6 +3,7 @@ package auctionsniper.ui;
 import javax.swing.table.AbstractTableModel;
 
 import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperStatus;
 
 class SnipersTableModel extends AbstractTableModel {
 	private static final String[] STATUS_TEXT = {
@@ -20,17 +21,15 @@ class SnipersTableModel extends AbstractTableModel {
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		switch (columnIndex) {
-		case 0: return snapshot.itemId;
-		case 1: return snapshot.lastPrice;
-		case 2: return snapshot.lastBid;
-		case 3: return STATUS_TEXT[snapshot.status.ordinal()];
-		}
-		throw new IllegalArgumentException(String.format("Invalid column index [%s]", columnIndex));
+		return Column.at(columnIndex).valueIn(snapshot);
 	}
 	
 	public void updateSnapshot(SniperSnapshot snapshot) {
 		this.snapshot = snapshot;
 		fireTableRowsUpdated(0, 0);
+	}
+
+	public static String textFor(SniperStatus status) {
+		return STATUS_TEXT[status.ordinal()];
 	}
 }

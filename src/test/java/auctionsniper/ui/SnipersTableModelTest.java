@@ -42,14 +42,14 @@ public class SnipersTableModelTest {
 		}});
 		model.updateSnapshot(SniperSnapshot.joining(ITEM_ID).bidding(555, 666));
 		
-		assertColumnEquals(0, ITEM_ID);
-		assertColumnEquals(1, 555);
-		assertColumnEquals(2, 666);
-		assertColumnEquals(3, MainWindow.STATUS_BIDDING);
+		assertColumnEquals(Column.ITEM_IDENTIFIER, ITEM_ID);
+		assertColumnEquals(Column.LAST_PRICE, 555);
+		assertColumnEquals(Column.LAST_BID, 666);
+		assertColumnEquals(Column.SNIPER_STATE, MainWindow.STATUS_BIDDING);
 	}
 	
-	private void assertColumnEquals(int columnIndex, Object expected) {
-		final int rowIndex = 0;
+	private void assertColumnEquals(Column column, Object expected) {
+		final int rowIndex = 0, columnIndex = column.ordinal();
 		assertEquals(expected, model.getValueAt(rowIndex, columnIndex));
 	}
 	
