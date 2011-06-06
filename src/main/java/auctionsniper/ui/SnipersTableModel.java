@@ -2,10 +2,11 @@ package auctionsniper.ui;
 
 import javax.swing.table.AbstractTableModel;
 
+import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperStatus;
 
-class SnipersTableModel extends AbstractTableModel {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener {
 	private static final String[] STATUS_TEXT = {
 		MainWindow.STATUS_JOINING, MainWindow.STATUS_BIDDING, MainWindow.STATUS_WINNING, MainWindow.STATUS_LOST, MainWindow.STATUS_WON
 	};
@@ -27,6 +28,10 @@ class SnipersTableModel extends AbstractTableModel {
 	public void updateSnapshot(SniperSnapshot snapshot) {
 		this.snapshot = snapshot;
 		fireTableRowsUpdated(0, 0);
+	}
+
+	public void sniperStateChanged(SniperSnapshot snapshot) {
+		updateSnapshot(snapshot);
 	}
 
 	public static String textFor(SniperStatus status) {

@@ -10,6 +10,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.ui.MainWindow;
+import auctionsniper.ui.SnipersTableModel;
 import auctionsniper.xmpp.AuctionMessageTranslator;
 import auctionsniper.xmpp.XMPPAuction;
 
@@ -43,6 +44,7 @@ public class Main {
 	}
 	
 	private MainWindow ui;
+	private SnipersTableModel snipers = new SnipersTableModel();
 	
 	public Main() throws Exception {
 		startUserInterface();
@@ -51,19 +53,21 @@ public class Main {
 	private void startUserInterface() throws Exception {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
-				ui = new MainWindow();
+				ui = new MainWindow(snipers);
 			}
 		});
 	}
 
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
-		ui.showState(SniperSnapshot.joining(itemId));
 		disconnectWhenUiCloses(connection);
+		snipers.sniperStateChanged(SniperSnapshot.joining(itemId));
+		
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		final Chat chat = connection.getChatManager().createChat(auctionId, null);
 		
 		XMPPAuction auction = new XMPPAuction(chat);
-		AuctionSniper sniper = new AuctionSniper(itemId, auction, new SniperStateDisplayer());
+		AuctionSniper sniper = new AuctionSniper(itemId, auction, 
+					new SwingThreadSniperListener(snipers));
 		chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(), sniper));
 		auction.join();
 	}
@@ -85,9 +89,19 @@ public class Main {
 		return connection;
 	}
 	
-	class SniperStateDisplayer implements SniperListener {
-		public void sniperStateChanged(SniperSnapshot state) {
-			ui.showState(state);
+	class SwingThreadSniperListener implements SniperListener {
+		private final SnipersTableModel delegate;
+
+		public SwingThreadSniperListener(SnipersTableModel snipers) {
+			delegate = snipers;
+		}
+		
+		public void sniperStateChanged(final SniperSnapshot snapshot) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() { 
+					delegate.sniperStateChanged(snapshot);
+				}
+			});
 		}
 	}
 }

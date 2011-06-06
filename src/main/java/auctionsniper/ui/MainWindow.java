@@ -18,11 +18,12 @@ public class MainWindow extends JFrame {
 	public static final String STATUS_WINNING = "Winning";
 	public static final String STATUS_WON = "Won";
 	
-	private final SnipersTableModel snipers = new SnipersTableModel();
+	private final SnipersTableModel snipers;
 	
-	public MainWindow() {
+	public MainWindow(SnipersTableModel snipers) {
 		super(TITLE);
 		setName(NAME);
+		this.snipers = snipers;
 		add(new JScrollPane(createSniperTable()));
 		pack(); // fit to prefered size
 		setVisible(true);
@@ -33,9 +34,5 @@ public class MainWindow extends JFrame {
 		JTable table = new JTable(snipers);
 		table.setName(SNIPER_TABLE_NAME);
 		return table;
-	}
-
-	public void showState(final SniperSnapshot snapshot) {
-		snipers.updateSnapshot(snapshot);
 	}
 }
