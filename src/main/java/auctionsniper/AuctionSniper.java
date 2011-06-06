@@ -13,19 +13,23 @@ public class AuctionSniper implements AuctionEventListener {
 	}
 
 	public void auctionClosed() {
-		sniperListener.sniperStateChanged(snapshot.closed());
+		notifyChange(snapshot.closed());
 	}
 
 	public void currentPrice(int currentPrice, int increment, PriceSource priceSource) {
 		switch(priceSource) {
 		case FromSniper:
-			snapshot = snapshot.winning(currentPrice);
+			notifyChange(snapshot.winning(currentPrice));
 			break;
 		case FromOtherBidder:
 			int bid = currentPrice + increment;
 			auction.bid(bid);
-			snapshot = snapshot.bidding(currentPrice, bid);
+			notifyChange(snapshot.bidding(currentPrice, bid));
 		}
+	}
+
+	private void notifyChange(SniperSnapshot snapshot) {
+		this.snapshot = snapshot;
 		sniperListener.sniperStateChanged(snapshot);
 	}
 }
