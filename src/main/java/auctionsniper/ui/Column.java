@@ -30,6 +30,10 @@ public enum Column {
 	
 	abstract public Object valueIn(SniperSnapshot snapshot);
 
+	public String header() {
+		return null;
+	}
+	
 	public static Column at(int columnIndex) {
 		if (columnIndex >= values().length)
 			throw new IllegalArgumentException(String.format("Invalid column index [%s]", columnIndex));
