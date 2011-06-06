@@ -1,11 +1,15 @@
 package endtoend;
 
 import static org.hamcrest.Matchers.equalTo;
+
+import javax.swing.table.JTableHeader;
+
 import auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
 import com.objogate.wl.swing.driver.JTableDriver;
+import com.objogate.wl.swing.driver.JTableHeaderDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 import com.objogate.wl.swing.matcher.IterableComponentsMatcher;
 import com.objogate.wl.swing.matcher.JLabelTextMatcher;
@@ -26,6 +30,15 @@ public class AuctionSniperDriver extends JFrameDriver {
 			new AWTEventQueueProber(timeout, 100));
 
 		hasTitle(MainWindow.TITLE);
+	}
+
+	public void hasColumnTitles() {
+		new JTableHeaderDriver(this, JTableHeader.class)
+			.hasHeaders(IterableComponentsMatcher.matching(
+				JLabelTextMatcher.withLabelText("Item"), 
+				JLabelTextMatcher.withLabelText("Last Price"),
+				JLabelTextMatcher.withLabelText("Last Bid"), 
+				JLabelTextMatcher.withLabelText("State")));
 	}
 
 	public void showsSniperStatus(String itemId, int lastPrice, int lastBid, String status) {

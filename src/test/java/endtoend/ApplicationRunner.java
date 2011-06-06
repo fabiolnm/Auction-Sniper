@@ -15,6 +15,8 @@ public class ApplicationRunner {
 		Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.itemId);
 		
 		driver = new AuctionSniperDriver(1000);
+		driver.hasTitle(MainWindow.TITLE);
+		driver.hasColumnTitles();
 		driver.showsSniperStatus(auction.itemId, 0, 0, MainWindow.STATUS_JOINING);
 	}
 
