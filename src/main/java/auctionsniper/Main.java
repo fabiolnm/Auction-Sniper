@@ -18,7 +18,6 @@ public class Main {
 	private static final int ARG_HOSTNAME = 0;
 	private static final int ARG_USERNAME = 1;
 	private static final int ARG_PASSWORD = 2;
-	private static final int ARG_ITEM_ID = 3;
 	
 	public static final String AUCTION_RESOURCE = "Auction";
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -32,15 +31,13 @@ public class Main {
 	public static final String CLOSE_FORMAT_MESSAGE = "SOLVersion: 1.1; Event: CLOSE;";
 	
 	public static void main(String... args) throws Exception {
-		String host = args[ARG_HOSTNAME], 
-			user = args[ARG_USERNAME], 
-			password = args[ARG_PASSWORD],
-			itemId = args[ARG_ITEM_ID];
-
+		String host = args[ARG_HOSTNAME], user = args[ARG_USERNAME], password = args[ARG_PASSWORD];
 		XMPPConnection connection = connectTo(host, user, password);
-		
+
 		Main main = new Main();
-		main.joinAuction(connection, itemId);
+		main.disconnectWhenUiCloses(connection);
+		for (int i = 3; i < args.length; i++)
+			main.joinAuction(connection, args[i]);
 	}
 	
 	private MainWindow ui;
@@ -59,7 +56,6 @@ public class Main {
 	}
 
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
-		disconnectWhenUiCloses(connection);
 		snipers.sniperStateChanged(SniperSnapshot.joining(itemId));
 		
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
