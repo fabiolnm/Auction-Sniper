@@ -11,13 +11,27 @@ public class ApplicationRunner {
 	
 	private AuctionSniperDriver driver;
 	
-	public void startBiddingIn(FakeAuctionServer auction) throws Exception {
-		Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.itemId);
+	public void startBiddingIn(FakeAuctionServer... auctions) throws Exception {
+		Main.main(arguments(auctions));
 		
 		driver = new AuctionSniperDriver(1000);
 		driver.hasTitle(MainWindow.TITLE);
 		driver.hasColumnTitles();
-		driver.showsSniperStatus(auction.itemId, 0, 0, MainWindow.STATUS_JOINING);
+		
+		for (FakeAuctionServer a : auctions)
+			driver.showsSniperStatus(a.itemId, 0, 0, MainWindow.STATUS_JOINING);
+	}
+
+	private String[] arguments(FakeAuctionServer[] auctions) {
+		int n = auctions.length;
+		String[] params = new String[3 + n];
+		params[0] = FakeAuctionServer.XMPP_HOSTNAME;
+		params[1] = SNIPER_ID;
+		params[2] = SNIPER_PASSWORD;
+		
+		for (int i = 0; i < n; i++)
+			params[i+3] = auctions[i].itemId;
+		return params;
 	}
 
 	public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
