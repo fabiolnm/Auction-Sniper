@@ -3,6 +3,7 @@ package auctionsniper.ui;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import javax.swing.event.TableModelEvent;
@@ -44,9 +45,15 @@ public class SnipersTableModelTest {
 	@Test
 	public void setsSniperValuesInColumns() {
 		context.checking(new Expectations() {{
-			one(listener).tableChanged(with(aRowChangedEvent()));
+			allowing(listener).tableChanged(with(anyInsertionEvent()));
+			one(listener).tableChanged(with(aChangeAtRow(0)));
 		}});
-		model.updateSnapshot(SniperSnapshot.joining(ITEM_ID).bidding(555, 666));
+		
+		SniperSnapshot joining = SniperSnapshot.joining(ITEM_ID);
+		SniperSnapshot bidding = joining.bidding(555, 666);
+		model.addSniper(joining);
+		
+		model.updateSnapshot(bidding);
 		
 		assertColumnEquals(Column.ITEM_IDENTIFIER, ITEM_ID);
 		assertColumnEquals(Column.LAST_PRICE, 555);
@@ -77,8 +84,12 @@ public class SnipersTableModelTest {
 		assertEquals(expected, model.getValueAt(rowIndex, columnIndex));
 	}
 	
-	private Matcher<TableModelEvent> aRowChangedEvent() {
-		return samePropertyValuesAs(new TableModelEvent(model, 0));
+	private Matcher<TableModelEvent> aChangeAtRow(int row) {
+		return samePropertyValuesAs(new TableModelEvent(model, row));
+	}
+	
+	private Matcher<TableModelEvent> anyInsertionEvent() {
+	    return hasProperty("type", equalTo(TableModelEvent.INSERT));
 	}
 	
 	private Matcher<TableModelEvent> anInsertionAtRow(int row) {

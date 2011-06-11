@@ -1,12 +1,14 @@
 package auctionsniper.ui;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import javax.swing.table.AbstractTableModel;
 
 import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperStatus;
+import auctionsniper.util.Defect;
 
 public class SnipersTableModel extends AbstractTableModel implements SniperListener {
 	private static final String[] STATUS_TEXT = {
@@ -18,6 +20,8 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 	};
 	
 	private ArrayList<SniperSnapshot> snapshots = new ArrayList<SniperSnapshot>();
+	private LinkedHashMap<String, SniperSnapshot> 
+		snapshotsByItemId = new LinkedHashMap<String, SniperSnapshot>();
 	
 	public int getRowCount() {
 		return snapshots.size();
@@ -37,11 +41,20 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 	}
 	
 	public void updateSnapshot(SniperSnapshot snapshot) {
-		fireTableRowsUpdated(0, 0);
+		String itemId = snapshot.itemId;
+		
+		SniperSnapshot olderSnapshot = snapshotsByItemId.put(itemId, snapshot);
+		if (olderSnapshot == null)
+			throw new Defect("No existing sniper for " + itemId);
+		
+		int rowIndex = snapshots.indexOf(olderSnapshot);
+		snapshots.set(rowIndex, snapshot);
+		fireTableRowsUpdated(rowIndex, rowIndex);
 	}
 
 	public void addSniper(SniperSnapshot snapshot) {
 		snapshots.add(snapshot);
+		snapshotsByItemId.put(snapshot.itemId, snapshot);
 		int rowToUpdate = snapshots.indexOf(snapshot);
 		fireTableRowsInserted(rowToUpdate, rowToUpdate);
 	}
