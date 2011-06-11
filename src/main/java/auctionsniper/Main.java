@@ -54,9 +54,17 @@ public class Main {
 			}
 		});
 	}
+	
+	private void safelyAddItemToModel(final String itemId) throws Exception {
+		SwingUtilities.invokeAndWait(new Runnable() {
+			public void run() {
+				snipers.addSniper(SniperSnapshot.joining(itemId));
+			}
+		});
+	}
 
-	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
-		snipers.sniperStateChanged(SniperSnapshot.joining(itemId));
+	private void joinAuction(XMPPConnection connection, String itemId) throws Exception {
+		safelyAddItemToModel(itemId);
 		
 		String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
 		final Chat chat = connection.getChatManager().createChat(auctionId, null);

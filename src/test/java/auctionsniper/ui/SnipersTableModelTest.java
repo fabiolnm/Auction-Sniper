@@ -41,7 +41,7 @@ public class SnipersTableModelTest {
 			assertEquals(column.header(), model.getColumnName(column.ordinal()));
 	}
 	
-	@Test 
+	@Test
 	public void setsSniperValuesInColumns() {
 		context.checking(new Expectations() {{
 			one(listener).tableChanged(with(aRowChangedEvent()));
@@ -54,6 +54,24 @@ public class SnipersTableModelTest {
 		assertColumnEquals(Column.SNIPER_STATE, MainWindow.STATUS_BIDDING);
 	}
 	
+	@Test
+	public void addSniperAndNotifyTableListener() {
+		context.checking(new Expectations() {{
+			one(listener).tableChanged(with(anInsertionAtRow(0)));
+		}});
+		
+		assertEquals(0, model.getRowCount());
+		
+		model.addSniper(SniperSnapshot.joining(ITEM_ID));
+
+		assertEquals(1, model.getRowCount());
+
+		assertColumnEquals(Column.ITEM_IDENTIFIER, ITEM_ID);
+		assertColumnEquals(Column.LAST_PRICE, 0);
+		assertColumnEquals(Column.LAST_BID, 0);
+		assertColumnEquals(Column.SNIPER_STATE, MainWindow.STATUS_JOINING);
+	}
+	
 	private void assertColumnEquals(Column column, Object expected) {
 		final int rowIndex = 0, columnIndex = column.ordinal();
 		assertEquals(expected, model.getValueAt(rowIndex, columnIndex));
@@ -61,5 +79,9 @@ public class SnipersTableModelTest {
 	
 	private Matcher<TableModelEvent> aRowChangedEvent() {
 		return samePropertyValuesAs(new TableModelEvent(model, 0));
+	}
+	
+	private Matcher<TableModelEvent> anInsertionAtRow(int row) {
+		return samePropertyValuesAs(new TableModelEvent(model, row));
 	}	
 }

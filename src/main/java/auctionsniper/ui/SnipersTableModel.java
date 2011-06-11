@@ -35,6 +35,10 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 		fireTableRowsUpdated(0, 0);
 	}
 
+	public void addSniper(SniperSnapshot snapshot) {
+		
+	}
+
 	public void sniperStateChanged(SniperSnapshot snapshot) {
 		updateSnapshot(snapshot);
 	}
