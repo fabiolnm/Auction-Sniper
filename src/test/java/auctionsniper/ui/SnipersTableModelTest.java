@@ -82,6 +82,9 @@ public class SnipersTableModelTest {
 	}
 	
 	private Matcher<TableModelEvent> anInsertionAtRow(int row) {
-		return samePropertyValuesAs(new TableModelEvent(model, row));
+		return samePropertyValuesAs(
+			new TableModelEvent(model, row, row, 
+					TableModelEvent.ALL_COLUMNS, 
+					TableModelEvent.INSERT));
 	}	
 }
