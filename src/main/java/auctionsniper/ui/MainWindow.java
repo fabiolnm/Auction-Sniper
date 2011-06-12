@@ -4,13 +4,13 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import auctionsniper.SniperSnapshot;
-
 public class MainWindow extends JFrame {
 	public static final String NAME = "Auction Sniper Main";
 	public static final String TITLE = "Auction Sniper";
 	
 	public static final String SNIPER_TABLE_NAME = "sniper_table";
+	public static final String NEW_ITEM_ID_NAME = "new_item_input";
+	public static final String JOIN_BUTTON_NAME = "join_button";
 	
 	public static final String STATUS_JOINING = "Joining";
 	public static final String STATUS_LOST = "Lost";
