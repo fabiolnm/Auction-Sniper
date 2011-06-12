@@ -41,15 +41,19 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 	}
 	
 	public void updateSnapshot(SniperSnapshot snapshot) {
+		int rowIndex = rowMatching(snapshot);
+		snapshots.set(rowIndex, snapshot);
+		fireTableRowsUpdated(rowIndex, rowIndex);
+	}
+
+	private int rowMatching(SniperSnapshot snapshot) {
 		String itemId = snapshot.itemId;
 		
 		SniperSnapshot olderSnapshot = snapshotsByItemId.put(itemId, snapshot);
 		if (olderSnapshot == null)
 			throw new Defect("No existing sniper for " + itemId);
 		
-		int rowIndex = snapshots.indexOf(olderSnapshot);
-		snapshots.set(rowIndex, snapshot);
-		fireTableRowsUpdated(rowIndex, rowIndex);
+		return snapshots.indexOf(olderSnapshot);
 	}
 
 	public void addSniper(SniperSnapshot snapshot) {
