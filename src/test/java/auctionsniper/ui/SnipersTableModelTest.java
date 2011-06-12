@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import auctionsniper.SniperSnapshot;
+import auctionsniper.util.Defect;
 
 @RunWith(JMock.class)
 public class SnipersTableModelTest {
@@ -72,6 +73,41 @@ public class SnipersTableModelTest {
 		assertRowMatchesSnapshot(0, joining);
 	}
 	
+	@Test 
+	public void holdsSnipersInAdditionOrder() {
+		context.checking(new Expectations() {{
+			ignoring(listener);
+		}});
+		
+		model.addSniper(SniperSnapshot.joining("item 0"));
+		model.addSniper(SniperSnapshot.joining("item 1"));
+		
+		assertEquals("item 0", cellValue(0, Column.ITEM_IDENTIFIER));
+		assertEquals("item 1", cellValue(1, Column.ITEM_IDENTIFIER));
+	}
+
+	@Test
+	public void updatesCorrectRowForSniper() {
+		context.checking(new Expectations() {{
+			ignoring(listener);
+		}});
+		
+		model.addSniper(SniperSnapshot.joining("item 0"));
+		
+		SniperSnapshot snapshot = SniperSnapshot.joining("item 1");
+		model.addSniper(snapshot);
+
+		SniperSnapshot winning = snapshot.winning(1000);
+		model.sniperStateChanged(winning);
+		
+		assertRowMatchesSnapshot(1, winning);
+	}
+	
+	@Test(expected=Defect.class)
+	public void throwsDefectIfNoExistingSniperForAnUpdate() {
+		model.sniperStateChanged(SniperSnapshot.joining("item 0"));
+	}
+	
 	private void assertRowMatchesSnapshot(int row, SniperSnapshot snapshot) {
 		assertColumnEquals(row, Column.ITEM_IDENTIFIER, snapshot.itemId);
 		assertColumnEquals(row, Column.LAST_PRICE, snapshot.lastPrice);
@@ -80,8 +116,12 @@ public class SnipersTableModelTest {
 	}
 	
 	private void assertColumnEquals(int rowIndex, Column column, Object expected) {
+		assertEquals(expected, cellValue(rowIndex, column));
+	}
+	
+	private Object cellValue(int rowIndex, Column column) {
 		final int columnIndex = column.ordinal();
-		assertEquals(expected, model.getValueAt(rowIndex, columnIndex));
+		return model.getValueAt(rowIndex, columnIndex);
 	}
 	
 	private Matcher<TableModelEvent> aChangeAtRow(int row) {
