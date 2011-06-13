@@ -20,6 +20,10 @@ import com.objogate.wl.swing.matcher.JLabelTextMatcher;
 
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
+	static {
+		System.setProperty("com.objogate.wl.keyboard", "US");
+	}
+	
 	public AuctionSniperDriver(int timeout) {
 		// A Gesture interacts with the user interface through the input devices. 
 		// Window Licker runs tests by performing Gestures and using Probes to observe the results.
