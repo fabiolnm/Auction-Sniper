@@ -45,8 +45,8 @@ public class FakeAuctionServer {
 	}
 
 	public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
-		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 		messageListener.receivesAMessage(equalTo(Main.JOIN_COMMAND_FORMAT));
+		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 	}	
 
 	public void hasReceivedBidFrom(int bid, String sniperId) throws InterruptedException {

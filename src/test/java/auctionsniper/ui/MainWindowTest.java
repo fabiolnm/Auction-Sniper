@@ -1,6 +1,8 @@
 package auctionsniper.ui;
 
 import static org.hamcrest.Matchers.equalTo;
+
+import org.junit.After;
 import org.junit.Test;
 
 import auctionsniper.UserRequestListener;
@@ -27,5 +29,10 @@ public class MainWindowTest {
 		
 		driver.typeItemIdAndClickJoinAuctionButton("an item-id");
 		driver.check(buttonProbe);
+	}
+	
+	@After
+	public void close() {
+		driver.dispose();
 	}
 }
