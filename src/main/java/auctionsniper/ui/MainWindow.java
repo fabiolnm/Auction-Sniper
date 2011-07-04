@@ -11,6 +11,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import auctionsniper.UserRequestListener;
+
 public class MainWindow extends JFrame {
 	public static final String NAME = "Auction Sniper Main";
 	public static final String TITLE = "Auction Sniper";
@@ -60,5 +62,10 @@ public class MainWindow extends JFrame {
 		JTable table = new JTable(snipers);
 		table.setName(SNIPER_TABLE_NAME);
 		return table;
+	}
+
+	public void addUserRequestListener(UserRequestListener userRequestListener) {
+		// TODO Auto-generated method stub
+		
 	}
 }
