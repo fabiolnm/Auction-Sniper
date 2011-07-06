@@ -19,11 +19,11 @@ public class Main {
 	private static final int ARG_USERNAME = 1;
 	private static final int ARG_PASSWORD = 2;
 	
-	public static final String AUCTION_RESOURCE = "Auction";
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
+	public static final String AUCTION_RESOURCE = "Auction";
 	public static final String AUCTION_ID_FORMAT =
 		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
-	
+
 	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String PRICE_FORMAT_MESSAGE = 
 		"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;";
@@ -57,17 +57,12 @@ public class Main {
 	private void addRequestListenerFor(final XMPPConnection connection) {
 		ui.addUserRequestListener(new UserRequestListener() {
 			public void joinAuction(String itemId) {
-				String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
-				
-				AuctionMessageTranslator msgTranslator = new AuctionMessageTranslator(connection.getUser());
-				Chat chat = connection.getChatManager().createChat(auctionId, null);
-				chat.addMessageListener(msgTranslator);
-				XMPPAuction auction = new XMPPAuction(chat);
+				Auction auction = new XMPPAuction(connection, itemId);
 				
 				snipers.addSniper(SniperSnapshot.joining(itemId));
 				AuctionSniper sniper = new AuctionSniper(itemId, auction, 
 							new SwingThreadSniperListener(snipers));
-				msgTranslator.setListener(sniper);
+				auction.setAuctionEventListener(sniper);
 				auction.join();
 			}
 		});
