@@ -57,15 +57,17 @@ public class Main {
 	private void addRequestListenerFor(final XMPPConnection connection) {
 		ui.addUserRequestListener(new UserRequestListener() {
 			public void joinAuction(String itemId) {
-				snipers.addSniper(SniperSnapshot.joining(itemId));
-				
 				String auctionId = String.format(AUCTION_ID_FORMAT, itemId, connection.getServiceName());
-				Chat chat = connection.getChatManager().createChat(auctionId, null);
 				
+				AuctionMessageTranslator msgTranslator = new AuctionMessageTranslator(connection.getUser());
+				Chat chat = connection.getChatManager().createChat(auctionId, null);
+				chat.addMessageListener(msgTranslator);
 				XMPPAuction auction = new XMPPAuction(chat);
+				
+				snipers.addSniper(SniperSnapshot.joining(itemId));
 				AuctionSniper sniper = new AuctionSniper(itemId, auction, 
 							new SwingThreadSniperListener(snipers));
-				chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(), sniper));
+				msgTranslator.setListener(sniper);
 				auction.join();
 			}
 		});

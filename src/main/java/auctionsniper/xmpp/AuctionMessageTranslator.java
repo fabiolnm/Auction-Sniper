@@ -8,17 +8,24 @@ import org.jivesoftware.smack.packet.Message;
 
 import auctionsniper.AuctionEventListener;
 import auctionsniper.AuctionEventListener.PriceSource;
+import auctionsniper.util.Defect;
 
 public class AuctionMessageTranslator implements MessageListener {
 	private final String sniperId;
-	private final AuctionEventListener listener;
+	private AuctionEventListener listener;
 
-	public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+	public AuctionMessageTranslator(String sniperId) {
 		this.sniperId = sniperId;
+	}
+
+	public void setListener(AuctionEventListener listener) {
 		this.listener = listener;
 	}
 
 	public void processMessage(Chat chat, Message message) {
+		if (listener == null)
+			throw new Defect("AuctionEventListener not set");
+			
 		AuctionEvent event = AuctionEvent.from(message.getBody());
 		String eventType = event.type();
 		if ("CLOSE".equals(eventType))

@@ -5,6 +5,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -19,8 +20,13 @@ public class AuctionMessageTranslatorTest {
 	private final Mockery context = new Mockery();
 	private final AuctionEventListener listener = context.mock(AuctionEventListener.class);
 	private final AuctionMessageTranslator translator = 
-		new AuctionMessageTranslator(ApplicationRunner.SNIPER_ID, listener);
+		new AuctionMessageTranslator(ApplicationRunner.SNIPER_ID);
 
+	@Before
+	public void setListener() {
+		translator.setListener(listener);
+	}
+	
 	@Test
 	public void notifiesAuctionClosedWhenCloseMessageReceived() {
 		context.checking(new Expectations() {{
