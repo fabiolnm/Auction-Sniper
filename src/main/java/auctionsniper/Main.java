@@ -5,14 +5,9 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.SwingUtilities;
 
-import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
-
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
-import auctionsniper.xmpp.AuctionMessageTranslator;
-import auctionsniper.xmpp.XMPPAuction;
+import auctionsniper.xmpp.XmppAuctionHouse;
 
 public class Main {
 	private static final int ARG_HOSTNAME = 0;
@@ -32,11 +27,11 @@ public class Main {
 	
 	public static void main(String... args) throws Exception {
 		String host = args[ARG_HOSTNAME], user = args[ARG_USERNAME], password = args[ARG_PASSWORD];
-		XMPPConnection connection = connectTo(host, user, password);
+		XmppAuctionHouse auctionHouse = XmppAuctionHouse.connectTo(host, user, password);
 
 		Main main = new Main();
-		main.disconnectWhenUiCloses(connection);
-		main.addRequestListenerFor(connection);
+		main.disconnectWhenUiCloses(auctionHouse);
+		main.addRequestListenerFor(auctionHouse);
 	}
 	
 	private MainWindow ui;
@@ -54,10 +49,10 @@ public class Main {
 		});
 	}
 	
-	private void addRequestListenerFor(final XMPPConnection connection) {
+	private void addRequestListenerFor(final XmppAuctionHouse auctionHouse) {
 		ui.addUserRequestListener(new UserRequestListener() {
 			public void joinAuction(String itemId) {
-				Auction auction = new XMPPAuction(connection, itemId);
+				Auction auction = auctionHouse.auctionFor(itemId);
 				
 				snipers.addSniper(SniperSnapshot.joining(itemId));
 				AuctionSniper sniper = new AuctionSniper(itemId, auction, 
@@ -68,21 +63,13 @@ public class Main {
 		});
 	}
 	
-	private void disconnectWhenUiCloses(final XMPPConnection connection) {
+	private void disconnectWhenUiCloses(final XmppAuctionHouse auctionHouse) {
 		ui.addWindowListener(new WindowAdapter() {
 		   @Override 
 		   public void windowClosed(WindowEvent e) {
-		      connection.disconnect();
+			   auctionHouse.disconnect();
 		   }
 		});
-	}
-	
-	private static XMPPConnection connectTo(String hostname, String username, String password)
-	throws XMPPException {
-		XMPPConnection connection = new XMPPConnection(hostname);
-		connection.connect();
-		connection.login(username, password, AUCTION_RESOURCE);
-		return connection;
 	}
 	
 	class SwingThreadSniperListener implements SniperListener {
