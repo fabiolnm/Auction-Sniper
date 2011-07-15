@@ -14,17 +14,6 @@ public class Main {
 	private static final int ARG_USERNAME = 1;
 	private static final int ARG_PASSWORD = 2;
 	
-	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
-	public static final String AUCTION_RESOURCE = "Auction";
-	public static final String AUCTION_ID_FORMAT =
-		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
-
-	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
-	public static final String PRICE_FORMAT_MESSAGE = 
-		"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;";
-	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %s;";
-	public static final String CLOSE_FORMAT_MESSAGE = "SOLVersion: 1.1; Event: CLOSE;";
-	
 	public static void main(String... args) throws Exception {
 		String host = args[ARG_HOSTNAME], user = args[ARG_USERNAME], password = args[ARG_PASSWORD];
 		XmppAuctionHouse auctionHouse = XmppAuctionHouse.connectTo(host, user, password);

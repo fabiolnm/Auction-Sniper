@@ -4,9 +4,13 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.Auction;
-import auctionsniper.Main;
 
 public class XmppAuctionHouse {
+	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
+	public static final String AUCTION_RESOURCE = "Auction";
+	public static final String AUCTION_ID_FORMAT =
+		ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
+
 	private final XMPPConnection connection;
 
 	private XmppAuctionHouse(XMPPConnection connection) {
@@ -17,7 +21,7 @@ public class XmppAuctionHouse {
 	throws XMPPException {
 		XMPPConnection connection = new XMPPConnection(hostname);
 		connection.connect();
-		connection.login(username, password, Main.AUCTION_RESOURCE);
+		connection.login(username, password, AUCTION_RESOURCE);
 		return new XmppAuctionHouse(connection);
 	}
 

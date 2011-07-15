@@ -1,9 +1,9 @@
 package endtoend;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -16,9 +16,14 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
-import auctionsniper.Main;
+import auctionsniper.xmpp.XMPPAuction;
+import auctionsniper.xmpp.XmppAuctionHouse;
 
 public class FakeAuctionServer {
+	public static final String PRICE_FORMAT_MESSAGE = 
+		"SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;";
+	public static final String CLOSE_FORMAT_MESSAGE = "SOLVersion: 1.1; Event: CLOSE;";
+
 	public static final String XMPP_HOSTNAME = "localhost";
 	private static final String AUCTION_PASSWORD = "auction";
 	
@@ -35,7 +40,8 @@ public class FakeAuctionServer {
 
 	public void startSellingItem() throws XMPPException {
 		connection.connect();
-		connection.login(String.format(Main.ITEM_ID_AS_LOGIN, itemId), AUCTION_PASSWORD, Main.AUCTION_RESOURCE);
+		connection.login(String.format(XmppAuctionHouse.ITEM_ID_AS_LOGIN, itemId), 
+				AUCTION_PASSWORD, XmppAuctionHouse.AUCTION_RESOURCE);
 		connection.getChatManager().addChatListener(new ChatManagerListener() {
 			public void chatCreated(Chat chat, boolean createdLocally) {
 				currentChat = chat;
@@ -45,22 +51,22 @@ public class FakeAuctionServer {
 	}
 
 	public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
-		messageListener.receivesAMessage(equalTo(Main.JOIN_COMMAND_FORMAT));
+		messageListener.receivesAMessage(equalTo(XMPPAuction.JOIN_COMMAND_FORMAT));
 		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 	}	
 
 	public void hasReceivedBidFrom(int bid, String sniperId) throws InterruptedException {
 		assertThat(currentChat.getParticipant(), equalTo(sniperId));
-		String bidMessage = String.format(Main.BID_COMMAND_FORMAT, bid);
+		String bidMessage = String.format(XMPPAuction.BID_COMMAND_FORMAT, bid);
 		messageListener.receivesAMessage(equalTo(bidMessage));
 	}
 
 	public void reportPrice(int price, int increment, String bidder) throws XMPPException {
-		currentChat.sendMessage(String.format(Main.PRICE_FORMAT_MESSAGE, price, increment, bidder));
+		currentChat.sendMessage(String.format(PRICE_FORMAT_MESSAGE, price, increment, bidder));
 	}
 	
 	public void announceClosed() throws XMPPException {
-		currentChat.sendMessage(Main.CLOSE_FORMAT_MESSAGE);
+		currentChat.sendMessage(CLOSE_FORMAT_MESSAGE);
 	}
 
 	public void stop() {
