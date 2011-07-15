@@ -6,7 +6,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
 
 import auctionsniper.ui.MainWindow;
-import auctionsniper.ui.SnipersTableModel;
 import auctionsniper.xmpp.XmppAuctionHouse;
 
 public class Main {
@@ -24,7 +23,7 @@ public class Main {
 	}
 	
 	private MainWindow ui;
-	private SnipersTableModel snipers = new SnipersTableModel();
+	private SniperPortfolio portfolio = new SniperPortfolio();
 	
 	public Main() throws Exception {
 		startUserInterface();
@@ -33,13 +32,13 @@ public class Main {
 	private void startUserInterface() throws Exception {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
-				ui = new MainWindow(snipers);
+				ui = new MainWindow(portfolio);
 			}
 		});
 	}
 	
 	private void addRequestListenerFor(XmppAuctionHouse auctionHouse) {
-		ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
+		ui.addUserRequestListener(new SniperLauncher(auctionHouse, portfolio));
 	}
 	
 	private void disconnectWhenUiCloses(final XmppAuctionHouse auctionHouse) {

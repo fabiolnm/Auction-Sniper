@@ -7,13 +7,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 import auctionsniper.AuctionSniper;
-import auctionsniper.SniperCollector;
 import auctionsniper.SniperListener;
+import auctionsniper.SniperPortfolio;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperStatus;
 import auctionsniper.util.Defect;
 
-public class SnipersTableModel extends AbstractTableModel implements SniperListener, SniperCollector {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener, SniperPortfolio.Listener {
 	private static final String[] STATUS_TEXT = {
 		MainWindow.STATUS_JOINING, 
 		MainWindow.STATUS_BIDDING, 
@@ -59,7 +59,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 		return snapshots.indexOf(olderSnapshot);
 	}
 
-	public void addSniper(AuctionSniper sniper) {
+	public void sniperAdded(AuctionSniper sniper) {
 		sniper.setSniperListener(new SwingThreadSniperListener(this));
 		addSniperSnapshot(sniper.getSnapshot());
 	}

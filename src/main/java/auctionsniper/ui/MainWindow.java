@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 
 public class MainWindow extends JFrame {
@@ -33,11 +34,11 @@ public class MainWindow extends JFrame {
 	
 	private List<UserRequestListener> requestListeners = new ArrayList<UserRequestListener>();
 
-	public MainWindow(SnipersTableModel snipers) {
+	public MainWindow(SniperPortfolio portfolio) {
 		super(TITLE);
 		setName(NAME);
 		
-		fillContentPane(makeControls(), createSniperTable(snipers));
+		fillContentPane(makeControls(), createSniperTable(portfolio));
 		
 		pack(); // fit to prefered size
 		setVisible(true);
@@ -70,7 +71,9 @@ public class MainWindow extends JFrame {
 		return controls;
 	}
 	
-	private JTable createSniperTable(SnipersTableModel snipers) {
+	private JTable createSniperTable(SniperPortfolio portfolio) {
+		SnipersTableModel snipers = new SnipersTableModel();
+		portfolio.addListener(snipers);
 		JTable table = new JTable(snipers);
 		table.setName(SNIPER_TABLE_NAME);
 		return table;
