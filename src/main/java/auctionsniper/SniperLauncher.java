@@ -1,12 +1,10 @@
 package auctionsniper;
 
-import auctionsniper.xmpp.XmppAuctionHouse;
-
 public class SniperLauncher implements UserRequestListener {
-	private final XmppAuctionHouse auctionHouse;
+	private final AuctionHouse auctionHouse;
 	private final SniperCollector collector;
 
-	public SniperLauncher(XmppAuctionHouse auctionHouse, SniperCollector collector) {
+	public SniperLauncher(AuctionHouse auctionHouse, SniperCollector collector) {
 		this.auctionHouse = auctionHouse;
 		this.collector = collector;
 	}
