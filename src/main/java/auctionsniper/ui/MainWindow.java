@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -57,10 +58,17 @@ public class MainWindow extends JFrame {
 	private JPanel makeControls() {
 		JPanel controls = new JPanel(new FlowLayout());
 		final JTextField itemIdField = new JTextField();
-		itemIdField.setColumns(25);
+		itemIdField.setColumns(20);
 		itemIdField.setName(NEW_ITEM_ID_NAME);
+		controls.add(new JLabel("Item id"));
 		controls.add(itemIdField);
-		
+
+		final JTextField stopPriceField = new JTextField();
+		stopPriceField.setColumns(10);
+		stopPriceField.setName(STOP_PRICE_NAME);
+		controls.add(new JLabel("Stop Price"));
+		controls.add(stopPriceField);
+
 		JButton joinAuctionButton = new JButton("Join Auction");
 		joinAuctionButton.setName(JOIN_BUTTON_NAME);
 		joinAuctionButton.addActionListener(new ActionListener() {
