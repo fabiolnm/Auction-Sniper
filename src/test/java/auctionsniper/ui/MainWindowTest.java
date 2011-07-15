@@ -27,7 +27,8 @@ public class MainWindowTest {
 			}
 		});
 		
-		driver.typeItemIdAndClickJoinAuctionButton("an item-id");
+		driver.typeItemId("an item-id");
+		driver.clickJoinAuctionButton();
 		driver.check(buttonProbe);
 	}
 	

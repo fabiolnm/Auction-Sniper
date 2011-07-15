@@ -16,9 +16,18 @@ public class ApplicationRunner {
 		startSniper();
 		
 		for (FakeAuctionServer a : auctions) {
-			driver.typeItemIdAndClickJoinAuctionButton(a.itemId);
+			driver.typeItemId(a.itemId);
+			driver.clickJoinAuctionButton();
 			driver.showsSniperStatus(a.itemId, 0, 0, MainWindow.STATUS_JOINING);
 		}
+	}
+
+	public void startBiddingWithStopPrice(FakeAuctionServer auction, int stopPrice) throws Exception {
+		startSniper();
+		driver.typeItemId(auction.itemId);
+		driver.typeStopPrice(stopPrice);
+		driver.clickJoinAuctionButton();
+		driver.showsSniperStatus(auction.itemId, 0, 0, MainWindow.STATUS_JOINING);
 	}
 
 	private void startSniper() throws Exception {
@@ -42,6 +51,10 @@ public class ApplicationRunner {
 
 	public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
 		driver.showsSniperStatus(auction.itemId, lastPrice, lastPrice, MainWindow.STATUS_WON);
+	}
+
+	public void hasShownSniperIsLosing(FakeAuctionServer auction, int lastPrice, int lastBid) {
+		driver.showsSniperStatus(auction.itemId, lastPrice, lastBid, MainWindow.STATUS_LOSING);
 	}
 
 	public void stop() {

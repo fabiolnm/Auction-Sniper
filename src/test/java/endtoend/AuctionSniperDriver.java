@@ -13,6 +13,7 @@ import com.objogate.wl.swing.driver.JButtonDriver;
 import com.objogate.wl.swing.driver.JFrameDriver;
 import com.objogate.wl.swing.driver.JTableDriver;
 import com.objogate.wl.swing.driver.JTableHeaderDriver;
+import com.objogate.wl.swing.driver.JTextComponentDriver;
 import com.objogate.wl.swing.driver.JTextFieldDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 import com.objogate.wl.swing.matcher.IterableComponentsMatcher;
@@ -59,18 +60,32 @@ public class AuctionSniperDriver extends JFrameDriver {
 				JLabelTextMatcher.withLabelText(equalTo(status))));
 	}
 
-	public void typeItemIdAndClickJoinAuctionButton(String itemId) {
+	public void typeItemId(String itemId) {
 		itemIdField().replaceAllText(itemId);
+	}
+
+	public void typeStopPrice(Integer stopPrice) {
+		stopPriceField().replaceAllText(stopPrice.toString());
+	}
+
+	public void clickJoinAuctionButton() {
 		bidButton().click();
 	}
-	
+
+	private JTextFieldDriver focusOnFieldNamed(String name) {
+		JTextFieldDriver field = new JTextFieldDriver(this, JTextField.class, named(name));
+		field.focusWithMouse();
+		return field;
+	}
+
 	private JTextFieldDriver itemIdField() {
-		JTextFieldDriver newItemId = new JTextFieldDriver(this, 
-				JTextField.class, named(MainWindow.NEW_ITEM_ID_NAME));
-		newItemId.focusWithMouse();
-		return newItemId;
+		return focusOnFieldNamed(MainWindow.NEW_ITEM_ID_NAME);
 	}
 	
+	private JTextComponentDriver<JTextField> stopPriceField() {
+		return focusOnFieldNamed(MainWindow.STOP_PRICE_NAME);
+	}
+
 	private JButtonDriver bidButton() {
 		return new JButtonDriver(this, JButton.class, named(MainWindow.JOIN_BUTTON_NAME));
 	}

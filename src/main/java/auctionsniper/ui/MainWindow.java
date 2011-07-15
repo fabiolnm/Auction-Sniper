@@ -24,6 +24,7 @@ public class MainWindow extends JFrame {
 	
 	public static final String SNIPER_TABLE_NAME = "sniper_table";
 	public static final String NEW_ITEM_ID_NAME = "new_item_input";
+	public static final String STOP_PRICE_NAME = "stop_price_input";
 	public static final String JOIN_BUTTON_NAME = "join_button";
 	
 	public static final String STATUS_JOINING = "Joining";
@@ -31,6 +32,7 @@ public class MainWindow extends JFrame {
 	public static final String STATUS_BIDDING = "Bidding";
 	public static final String STATUS_WINNING = "Winning";
 	public static final String STATUS_WON = "Won";
+	public static final String STATUS_LOSING = "Losing";
 	
 	private List<UserRequestListener> requestListeners = new ArrayList<UserRequestListener>();
 
