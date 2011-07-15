@@ -38,18 +38,8 @@ public class Main {
 		});
 	}
 	
-	private void addRequestListenerFor(final XmppAuctionHouse auctionHouse) {
-		ui.addUserRequestListener(new UserRequestListener() {
-			public void joinAuction(String itemId) {
-				Auction auction = auctionHouse.auctionFor(itemId);
-				
-				snipers.addSniper(SniperSnapshot.joining(itemId));
-				AuctionSniper sniper = new AuctionSniper(itemId, auction, 
-							new SwingThreadSniperListener(snipers));
-				auction.setAuctionEventListener(sniper);
-				auction.join();
-			}
-		});
+	private void addRequestListenerFor(XmppAuctionHouse auctionHouse) {
+		ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
 	}
 	
 	private void disconnectWhenUiCloses(final XmppAuctionHouse auctionHouse) {
@@ -59,21 +49,5 @@ public class Main {
 			   auctionHouse.disconnect();
 		   }
 		});
-	}
-	
-	class SwingThreadSniperListener implements SniperListener {
-		private final SnipersTableModel delegate;
-
-		public SwingThreadSniperListener(SnipersTableModel snipers) {
-			delegate = snipers;
-		}
-		
-		public void sniperStateChanged(final SniperSnapshot snapshot) {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() { 
-					delegate.sniperStateChanged(snapshot);
-				}
-			});
-		}
 	}
 }
