@@ -5,10 +5,12 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -57,28 +59,39 @@ public class MainWindow extends JFrame {
 
 	private JPanel makeControls() {
 		JPanel controls = new JPanel(new FlowLayout());
-		final JTextField itemIdField = new JTextField();
-		itemIdField.setColumns(20);
-		itemIdField.setName(NEW_ITEM_ID_NAME);
-		controls.add(new JLabel("Item id"));
-		controls.add(itemIdField);
-
-		final JTextField stopPriceField = new JTextField();
-		stopPriceField.setColumns(10);
-		stopPriceField.setName(STOP_PRICE_NAME);
-		controls.add(new JLabel("Stop Price"));
-		controls.add(stopPriceField);
-
+		final JTextField itemIdField = itemIdTextField(controls), stopPriceField = stopPriceField(controls);
 		JButton joinAuctionButton = new JButton("Join Auction");
 		joinAuctionButton.setName(JOIN_BUTTON_NAME);
 		joinAuctionButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (UserRequestListener requestListener : requestListeners)
-					requestListener.joinAuction(itemIdField.getText());
+					requestListener.joinAuction(itemId());
+			}
+
+			private String itemId() {
+				return itemIdField.getText();
 			}
 		});
 		controls.add(joinAuctionButton);
 		return controls;
+	}
+	
+	private JTextField stopPriceField(JPanel controls) {
+		JFormattedTextField stopPriceField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		stopPriceField.setColumns(10);
+		stopPriceField.setName(STOP_PRICE_NAME);
+		controls.add(new JLabel("Stop Price"));
+		controls.add(stopPriceField);
+		return stopPriceField;
+	}
+
+	private JTextField itemIdTextField(JPanel controls) {
+		JTextField itemIdField = new JTextField();
+		itemIdField.setColumns(20);
+		itemIdField.setName(NEW_ITEM_ID_NAME);
+		controls.add(new JLabel("Item id"));
+		controls.add(itemIdField);
+		return itemIdField;
 	}
 	
 	private JTable createSniperTable(SniperPortfolio portfolio) {
