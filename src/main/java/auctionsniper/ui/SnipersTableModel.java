@@ -3,14 +3,17 @@ package auctionsniper.ui;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
+import auctionsniper.AuctionSniper;
+import auctionsniper.SniperCollector;
 import auctionsniper.SniperListener;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperStatus;
 import auctionsniper.util.Defect;
 
-public class SnipersTableModel extends AbstractTableModel implements SniperListener {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener, SniperCollector {
 	private static final String[] STATUS_TEXT = {
 		MainWindow.STATUS_JOINING, 
 		MainWindow.STATUS_BIDDING, 
@@ -56,7 +59,12 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 		return snapshots.indexOf(olderSnapshot);
 	}
 
-	public void addSniper(SniperSnapshot snapshot) {
+	public void addSniper(AuctionSniper sniper) {
+		sniper.setSniperListener(new SwingThreadSniperListener(this));
+		addSniperSnapshot(sniper.getSnapshot());
+	}
+
+	private void addSniperSnapshot(SniperSnapshot snapshot) {
 		snapshots.add(snapshot);
 		snapshotsByItemId.put(snapshot.itemId, snapshot);
 		int rowToUpdate = snapshots.indexOf(snapshot);
@@ -69,5 +77,21 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
 	public static String textFor(SniperStatus status) {
 		return STATUS_TEXT[status.ordinal()];
+	}
+	
+	class SwingThreadSniperListener implements SniperListener {
+		private final SnipersTableModel delegate;
+
+		public SwingThreadSniperListener(SnipersTableModel snipers) {
+			delegate = snipers;
+		}
+		
+		public void sniperStateChanged(final SniperSnapshot snapshot) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() { 
+					delegate.sniperStateChanged(snapshot);
+				}
+			});
+		}
 	}
 }
