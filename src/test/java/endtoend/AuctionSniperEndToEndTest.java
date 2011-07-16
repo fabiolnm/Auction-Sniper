@@ -169,6 +169,36 @@ public class AuctionSniperEndToEndTest {
 		auction1.announceClosed();
 		application.showsSniperHasLostAuction(auction1, 1207, 1098);
 	}
+	
+	@Test
+	public void sniperReportsInvalidAuctionMessageAndStopsRespondingToEvents() throws Exception {
+		String brokenMessage = "a broken message"; 
+		auction1.startSellingItem(); 
+		auction2.startSellingItem();
+		application.startBiddingIn(auction1, auction2); 
+		
+		auction1.hasReceivedJoinRequestFrom(ApplicationRunner.SNIPER_XMPP_ID);
+		
+		auction1.reportPrice(500, 20, "other bidder"); 
+		auction1.hasReceivedBidFrom(520, ApplicationRunner.SNIPER_XMPP_ID);
+		
+		// AuctionMessageTranslator$AuctionEvent will throw a ArrayIndexOutOfBoundsException
+		// when AuctionEvent.from("a broken message") tries to extract the fields from the event string
+		auction1.sendInvalidMessageContaining(brokenMessage); 
+		application.showsSniperHasFailed(auction1);
+		
+		auction1.reportPrice(520, 21, "other bidder");
+		waitForAnotherAuctionEventToAssureSniperIgnoresFailedAuctionSubsequentEvents(); 
+		
+		application.showsSniperHasFailed(auction1);
+	}
+
+	// see chapter 27, Runaway Tests section 
+	private void waitForAnotherAuctionEventToAssureSniperIgnoresFailedAuctionSubsequentEvents() throws Exception {
+		auction2.hasReceivedJoinRequestFrom(ApplicationRunner.SNIPER_XMPP_ID); 
+		auction2.reportPrice(600, 6, "other bidder"); 
+		application.hasShownSniperIsBidding(auction2, 600, 606);	
+	}
 
 	// Additional cleanup
 	@After

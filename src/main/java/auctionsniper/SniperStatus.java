@@ -27,7 +27,7 @@ public enum SniperStatus {
 			return WON;
 		}
 	},
-	LOST("Lost"), WON("Won");
+	LOST("Lost"), WON("Won"), FAILED("Failed");
 
 	public final String text;
 	

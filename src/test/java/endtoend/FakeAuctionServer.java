@@ -64,7 +64,11 @@ public class FakeAuctionServer {
 	public void reportPrice(int price, int increment, String bidder) throws XMPPException {
 		currentChat.sendMessage(String.format(PRICE_FORMAT_MESSAGE, price, increment, bidder));
 	}
-	
+
+	public void sendInvalidMessageContaining(String brokenMessage) throws XMPPException {
+		currentChat.sendMessage(brokenMessage);
+	}
+
 	public void announceClosed() throws XMPPException {
 		currentChat.sendMessage(CLOSE_FORMAT_MESSAGE);
 	}

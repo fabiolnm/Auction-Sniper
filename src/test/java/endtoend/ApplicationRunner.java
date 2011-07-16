@@ -58,6 +58,10 @@ public class ApplicationRunner {
 		driver.showsSniperStatus(auction.itemId, lastPrice, lastBid, SniperStatus.LOSING.text);
 	}
 
+	public void showsSniperHasFailed(FakeAuctionServer auction) {
+		driver.showsSniperStatus(auction.itemId, 0, 0, SniperStatus.FAILED.text);
+	}
+
 	public void stop() {
 		if (driver!=null)
 			driver.dispose();
