@@ -31,13 +31,6 @@ public class MainWindow extends JFrame {
 	public static final String STOP_PRICE_NAME = "stop_price_input";
 	public static final String JOIN_BUTTON_NAME = "join_button";
 	
-	public static final String STATUS_JOINING = "Joining";
-	public static final String STATUS_LOST = "Lost";
-	public static final String STATUS_BIDDING = "Bidding";
-	public static final String STATUS_WINNING = "Winning";
-	public static final String STATUS_WON = "Won";
-	public static final String STATUS_LOSING = "Losing";
-	
 	private List<UserRequestListener> requestListeners = new ArrayList<UserRequestListener>();
 
 	public MainWindow(SniperPortfolio portfolio) {

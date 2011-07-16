@@ -14,14 +14,6 @@ import auctionsniper.SniperStatus;
 import auctionsniper.util.Defect;
 
 public class SnipersTableModel extends AbstractTableModel implements SniperListener, SniperPortfolio.Listener {
-	private static final String[] STATUS_TEXT = {
-		MainWindow.STATUS_JOINING, 
-		MainWindow.STATUS_BIDDING, 
-		MainWindow.STATUS_WINNING, 
-		MainWindow.STATUS_LOST, 
-		MainWindow.STATUS_WON
-	};
-	
 	private ArrayList<SniperSnapshot> snapshots = new ArrayList<SniperSnapshot>();
 	private LinkedHashMap<String, SniperSnapshot> 
 		snapshotsByItemId = new LinkedHashMap<String, SniperSnapshot>();
@@ -76,7 +68,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 	}
 
 	public static String textFor(SniperStatus status) {
-		return STATUS_TEXT[status.ordinal()];
+		return status.text;
 	}
 	
 	class SwingThreadSniperListener implements SniperListener {
