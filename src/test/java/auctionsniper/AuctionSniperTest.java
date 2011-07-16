@@ -116,4 +116,17 @@ public class AuctionSniperTest {
 		sniper.currentPrice(initialPrice, initialIncrement, PriceSource.FromOtherBidder);
 		sniper.currentPrice(lastPrice, increment, PriceSource.FromOtherBidder);
 	}
+	
+	@Test
+	public void reportsLostIfAuctionClosesWhenLosing() {
+		final int increment = 1, lastPrice = STOP_PRICE;
+		context.checking(new Expectations() {{
+			SniperSnapshot losingSnapshot = SniperSnapshot.joining(ITEM_ID).losing(lastPrice);
+			allowing(sniperListener).sniperStateChanged(with(losingSnapshot));
+			
+			atLeast(1).of(sniperListener).sniperStateChanged(with(losingSnapshot.closed()));
+		}});
+		sniper.currentPrice(lastPrice, increment, PriceSource.FromOtherBidder);
+		sniper.auctionClosed();
+	}
 }
