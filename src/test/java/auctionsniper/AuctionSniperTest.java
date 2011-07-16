@@ -2,6 +2,7 @@ package auctionsniper;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.Sequence;
 import org.jmock.States;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
@@ -128,5 +129,22 @@ public class AuctionSniperTest {
 		}});
 		sniper.currentPrice(lastPrice, increment, PriceSource.FromOtherBidder);
 		sniper.auctionClosed();
+	}
+	
+	@Test
+	public void continuesToBeLosingOnceStopPriceHasBeenReached() {
+		final int increment = 1, firstPrice = STOP_PRICE, secondPrice = firstPrice + increment;
+		final Sequence state = context.sequence("losing state");
+		context.checking(new Expectations() {{
+			SniperSnapshot losingSnapshot = SniperSnapshot.joining(ITEM_ID).losing(firstPrice);
+			atLeast(1).of(sniperListener).sniperStateChanged(with(losingSnapshot));
+			inSequence(state);
+			
+			atLeast(1).of(sniperListener).sniperStateChanged(with(losingSnapshot.losing(secondPrice)));
+			inSequence(state);
+		}});
+		
+		sniper.currentPrice(firstPrice, increment, PriceSource.FromOtherBidder);
+		sniper.currentPrice(secondPrice, increment, PriceSource.FromOtherBidder);
 	}
 }
