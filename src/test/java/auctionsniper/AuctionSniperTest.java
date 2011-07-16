@@ -13,11 +13,12 @@ import auctionsniper.AuctionEventListener.PriceSource;
 @RunWith(JMock.class)
 public class AuctionSniperTest {
 	private final String ITEM_ID = "item-id";
+	private final Integer STOP_PRICE = 2000;
 	private final Mockery context = new Mockery();
 
 	private final Auction auction = context.mock(Auction.class);
 	private final SniperListener sniperListener = context.mock(SniperListener.class);
-	private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction);
+	private final AuctionSniper sniper = new AuctionSniper(new Item(ITEM_ID, STOP_PRICE), auction);
 
 	private final States sniperState = context.states("sniper");
 	

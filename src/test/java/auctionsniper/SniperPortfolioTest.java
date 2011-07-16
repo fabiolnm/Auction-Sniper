@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 public class SniperPortfolioTest {
 	private Mockery context = new Mockery();
 	private SniperPortfolio.Listener listener = context.mock(SniperPortfolio.Listener.class);
-	private AuctionSniper sniper = new AuctionSniper("item id", null);
+	private AuctionSniper sniper = new AuctionSniper(new Item("item id", 123), null);
 	
 	@Test
 	public void listenerIsNotifiedWhenNewAuctionIsAddedToPortifolio() {

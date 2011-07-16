@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import auctionsniper.Item;
 import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 
@@ -59,24 +60,31 @@ public class MainWindow extends JFrame {
 
 	private JPanel makeControls() {
 		JPanel controls = new JPanel(new FlowLayout());
-		final JTextField itemIdField = itemIdTextField(controls), stopPriceField = stopPriceField(controls);
+		final JTextField itemIdField = itemIdTextField(controls);
+		final JFormattedTextField stopPriceField = stopPriceField(controls);
+
 		JButton joinAuctionButton = new JButton("Join Auction");
 		joinAuctionButton.setName(JOIN_BUTTON_NAME);
 		joinAuctionButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (UserRequestListener requestListener : requestListeners)
-					requestListener.joinAuction(itemId());
+					requestListener.joinAuction(new Item(itemId(), stopPrice()));
 			}
 
 			private String itemId() {
 				return itemIdField.getText();
+			}
+
+			private Integer stopPrice() {
+				Object priceValue = stopPriceField.getValue();
+				return priceValue == null ? null : ((Number) priceValue).intValue();
 			}
 		});
 		controls.add(joinAuctionButton);
 		return controls;
 	}
 	
-	private JTextField stopPriceField(JPanel controls) {
+	private JFormattedTextField stopPriceField(JPanel controls) {
 		JFormattedTextField stopPriceField = new JFormattedTextField(NumberFormat.getIntegerInstance());
 		stopPriceField.setColumns(10);
 		stopPriceField.setName(STOP_PRICE_NAME);

@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import auctionsniper.AuctionSniper;
+import auctionsniper.Item;
 import auctionsniper.SniperSnapshot;
 import auctionsniper.util.Defect;
 
@@ -27,7 +28,7 @@ public class SnipersTableModelTest {
 	private final Mockery context = new Mockery();
 	private final SnipersTableModel model = new SnipersTableModel();
 	private TableModelListener listener = context.mock(TableModelListener.class);
-	private AuctionSniper sniper = new AuctionSniper(ITEM_ID, null);
+	private AuctionSniper sniper = new AuctionSniper(new Item(ITEM_ID, 234), null);
 	
 	@Before 
 	public void attachModelListener() {
@@ -78,8 +79,8 @@ public class SnipersTableModelTest {
 			ignoring(listener);
 		}});
 		
-		model.sniperAdded(new AuctionSniper("item 0", null));
-		model.sniperAdded(new AuctionSniper("item 1", null));
+		model.sniperAdded(new AuctionSniper(new Item("item 0", 345), null));
+		model.sniperAdded(new AuctionSniper(new Item("item 1", 456), null));
 		
 		assertEquals("item 0", cellValue(0, Column.ITEM_IDENTIFIER));
 		assertEquals("item 1", cellValue(1, Column.ITEM_IDENTIFIER));
@@ -91,7 +92,9 @@ public class SnipersTableModelTest {
 			ignoring(listener);
 		}});
 		
-		AuctionSniper sniper1 = new AuctionSniper("item 0", null), sniper2 = new AuctionSniper("item 1", null);
+		AuctionSniper 
+			sniper1 = new AuctionSniper(new Item("item 0", 567), null), 
+			sniper2 = new AuctionSniper(new Item("item 1", 678), null);
 		model.sniperAdded(sniper1);
 		model.sniperAdded(sniper2);
 
