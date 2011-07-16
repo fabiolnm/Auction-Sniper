@@ -70,7 +70,7 @@ public class MainWindow extends JFrame {
 
 			private Integer stopPrice() {
 				Object priceValue = stopPriceField.getValue();
-				return priceValue == null ? null : ((Number) priceValue).intValue();
+				return priceValue == null ? Integer.MAX_VALUE : ((Number) priceValue).intValue();
 			}
 		});
 		controls.add(joinAuctionButton);
