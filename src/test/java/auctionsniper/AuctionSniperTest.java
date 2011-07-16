@@ -87,5 +87,24 @@ public class AuctionSniperTest {
 		
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 		sniper.auctionClosed();
-	}	
+	}
+	
+	@Test
+	public void doesNotBidAndReportIsLosingWhenPriceIsHigherThanStopPrice() {
+		final int initialPrice = 234, initialIncrement = 30, lastBid = initialPrice + initialIncrement;
+		final int increment = 1, lastPrice = STOP_PRICE;
+		context.checking(new Expectations() {{
+			allowing(auction).bid(lastBid);
+			
+			SniperSnapshot biddingSnapshot = SniperSnapshot.joining(ITEM_ID).bidding(initialPrice, lastBid);
+			allowing(sniperListener).sniperStateChanged(with(biddingSnapshot));
+			then(sniperState.is("bidding"));
+			
+			SniperSnapshot losingSnapshot = biddingSnapshot.losing(lastPrice);
+			atLeast(1).of(sniperListener).sniperStateChanged(with(losingSnapshot));
+			when(sniperState.is("bidding"));
+		}});
+		sniper.currentPrice(initialPrice, initialIncrement, PriceSource.FromOtherBidder);
+		sniper.currentPrice(lastPrice, increment, PriceSource.FromOtherBidder);
+	}
 }
