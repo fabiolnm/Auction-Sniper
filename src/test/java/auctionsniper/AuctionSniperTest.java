@@ -88,6 +88,15 @@ public class AuctionSniperTest {
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 		sniper.auctionClosed();
 	}
+
+	@Test
+	public void doesNotBidAndReportIsLosingIfFirstPriceIsHigherThanStopPrice() {
+		final int increment = 1, lastPrice = STOP_PRICE;
+		context.checking(new Expectations() {{
+			atLeast(1).of(sniperListener).sniperStateChanged(SniperSnapshot.joining(ITEM_ID).losing(lastPrice));
+		}});
+		sniper.currentPrice(lastPrice, increment, PriceSource.FromOtherBidder);
+	}
 	
 	@Test
 	public void doesNotBidAndReportIsLosingWhenPriceIsHigherThanStopPrice() {
