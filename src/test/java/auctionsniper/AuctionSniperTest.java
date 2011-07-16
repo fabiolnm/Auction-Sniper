@@ -147,4 +147,28 @@ public class AuctionSniperTest {
 		sniper.currentPrice(firstPrice, increment, PriceSource.FromOtherBidder);
 		sniper.currentPrice(secondPrice, increment, PriceSource.FromOtherBidder);
 	}
+	
+	@Test
+	public void doesNotBidAndReportsLosingIfPriceAfterWinningIsAboveStopPrice() {
+		final int increment = 1, biddingPrice = STOP_PRICE - 1, sniperPrice = STOP_PRICE, lastPrice = sniperPrice + increment;
+		context.checking(new Expectations() {{
+			allowing(auction).bid(sniperPrice);
+			then(sniperState.is("bidding"));
+			
+			SniperSnapshot biddingSnapshot = SniperSnapshot.joining(ITEM_ID).bidding(biddingPrice, sniperPrice);
+			allowing(sniperListener).sniperStateChanged(with(biddingSnapshot));
+			when(sniperState.is("bidding"));
+			
+			SniperSnapshot winningSnapshot = biddingSnapshot.winning(sniperPrice);
+			allowing(sniperListener).sniperStateChanged(with(winningSnapshot));
+			then(sniperState.is("winning"));
+			
+			atLeast(1).of(sniperListener).sniperStateChanged(with(winningSnapshot.losing(lastPrice)));
+			when(sniperState.is("winning"));
+			then(sniperState.is("losing"));
+		}});
+		sniper.currentPrice(biddingPrice, increment, PriceSource.FromOtherBidder);
+		sniper.currentPrice(sniperPrice, increment, PriceSource.FromSniper);
+		sniper.currentPrice(lastPrice, increment, PriceSource.FromOtherBidder);
+	}
 }
