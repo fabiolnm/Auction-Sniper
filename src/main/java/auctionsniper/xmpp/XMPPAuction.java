@@ -39,7 +39,20 @@ public class XMPPAuction implements Auction {
 		}
 	}
 
-	public void setAuctionEventListener(AuctionEventListener listener) {
-		msgTranslator.setListener(listener);
+	public void setAuctionEventListener(final AuctionEventListener listener) {
+		msgTranslator.setListener(new AuctionEventListener() {
+			public void auctionClosed() {
+				listener.auctionClosed();
+			}
+
+			public void currentPrice(int currentPrice, int increment, PriceSource priceSource) {
+				listener.currentPrice(currentPrice, increment, priceSource);
+			}
+
+			public void auctionFailed() {
+				chat.removeMessageListener(msgTranslator);
+				listener.auctionFailed();
+			}
+		});
 	}
 }
