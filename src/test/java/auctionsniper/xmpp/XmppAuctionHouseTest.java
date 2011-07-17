@@ -58,6 +58,9 @@ public class XmppAuctionHouseTest {
 		
 		public void currentPrice(int price, int increment, PriceSource priceSource) {
 		}
+
+		public void auctionFailed() {
+		}
 		
 		public void shouldHaveBeenNotifiedAuctionClosed() throws Exception {
 			assertTrue("should have been closed", auctionWasClosed.await(2, TimeUnit.SECONDS));
