@@ -9,7 +9,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,8 +31,8 @@ public class LoggingXmppFailureReporterTest {
 		reporter.cannotTranslateMessage(sniperId, badMessage, badException);
 	}
 	
-	@After
-	public void resetLogging() {
+	@AfterClass
+	public static void resetLogging() {
 		LogManager.getLogManager().reset();
 	}
 }
