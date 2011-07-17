@@ -13,9 +13,11 @@ import auctionsniper.util.Defect;
 public class AuctionMessageTranslator implements MessageListener {
 	private final String sniperId;
 	private AuctionEventListener listener;
+	private final XmppFailureReporter failureReporter;
 
-	public AuctionMessageTranslator(String sniperId) {
+	public AuctionMessageTranslator(String sniperId, XmppFailureReporter failureReporter) {
 		this.sniperId = sniperId;
+		this.failureReporter = failureReporter;
 	}
 
 	public void setListener(AuctionEventListener listener) {
