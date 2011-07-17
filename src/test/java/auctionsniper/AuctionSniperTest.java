@@ -171,4 +171,12 @@ public class AuctionSniperTest {
 		sniper.currentPrice(sniperPrice, increment, PriceSource.FromSniper);
 		sniper.currentPrice(lastPrice, increment, PriceSource.FromOtherBidder);
 	}
+	
+	@Test
+	public void reportsFailedIfAutionReportsBadMessageWhenJoining() {
+		context.checking(new Expectations() {{
+			atLeast(1).of(sniperListener).sniperStateChanged(with(SniperSnapshot.joining(ITEM_ID).failed()));
+		}});
+		sniper.auctionFailed();
+	}
 }

@@ -32,6 +32,10 @@ public class SniperSnapshot {
 		return new SniperSnapshot(itemId, price, price, SniperStatus.WINNING);
 	}
 
+	public SniperSnapshot failed() {
+		return new SniperSnapshot(itemId, lastPrice, lastBid, SniperStatus.FAILED);
+	}
+
 	public SniperSnapshot closed() {
 		return new SniperSnapshot(itemId, lastPrice, lastBid, status.whenAuctionClosed());
 	}
