@@ -70,4 +70,16 @@ public class AuctionMessageTranslatorTest {
 		message.setBody("a bad message");
 		translator.processMessage(UNUSED_CHAT, message);
 	}
+	
+	@Test
+	public void notifiesAuctionFailedWhenEventTypeMissing() {
+		String aMessageWithTypeMissing = 
+			"SOLVersion: 1.1; CurrentPrice: 234; Increment: 5; Bidder: " + ApplicationRunner.SNIPER_ID + ";";
+		context.checking(new Expectations() {{ 
+			exactly(1).of(listener).auctionFailed();
+		}}); 
+		Message message = new Message(); 
+		message.setBody(aMessageWithTypeMissing); 
+		translator.processMessage(UNUSED_CHAT, message);
+	}
 }
