@@ -31,8 +31,7 @@ public class AuctionSniper implements AuctionEventListener {
 	}
 
 	public void auctionFailed() {
-		// TODO Auto-generated method stub
-		
+		sniperListener.sniperStateChanged(snapshot.failed());
 	}
 
 	private void notifyChange(SniperSnapshot snapshot) {

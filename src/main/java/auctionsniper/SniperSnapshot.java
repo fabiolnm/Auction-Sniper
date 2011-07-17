@@ -33,7 +33,7 @@ public class SniperSnapshot {
 	}
 
 	public SniperSnapshot failed() {
-		return new SniperSnapshot(itemId, lastPrice, lastBid, SniperStatus.FAILED);
+		return new SniperSnapshot(itemId, 0, 0, SniperStatus.FAILED);
 	}
 
 	public SniperSnapshot closed() {
