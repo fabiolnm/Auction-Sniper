@@ -1,4 +1,0 @@
-- Refactor SniperLauncher, moving swing features that does't fit there.
-- Removes SniperSnapshot setup duplication (called twice: once in SniperLauncher, once inside AuctionSniper constructor.
-- Change AuctionSniper constructor, turning SniperListener a notification rather than a dependency.
-- Change SnipersTableModel API, to add Snipers instead of Snapshots - and updates SnipersTableModelTest that were affected by this refactor.

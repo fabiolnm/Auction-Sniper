@@ -1,5 +1,9 @@
 package endtoend;
 
+import java.io.IOException;
+
+import org.hamcrest.Matchers;
+
 import auctionsniper.Main;
 import auctionsniper.SniperStatus;
 import auctionsniper.ui.MainWindow;
@@ -12,6 +16,7 @@ public class ApplicationRunner {
 		String.format("%s@%s/%s", SNIPER_ID, FakeAuctionServer.XMPP_HOSTNAME, XmppAuctionHouse.AUCTION_RESOURCE);
 	
 	private AuctionSniperDriver driver;
+	private AuctionLogDriver logDriver = new AuctionLogDriver();
 	
 	public void startBiddingIn(FakeAuctionServer... auctions) throws Exception {
 		startSniper();
@@ -32,6 +37,8 @@ public class ApplicationRunner {
 	}
 
 	private void startSniper() throws Exception {
+		logDriver.clearLog();
+		
 		Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD);
 		driver = new AuctionSniperDriver(1000);
 		driver.hasTitle(MainWindow.TITLE);
@@ -60,6 +67,10 @@ public class ApplicationRunner {
 
 	public void showsSniperHasFailed(FakeAuctionServer auction) {
 		driver.showsSniperStatus(auction.itemId, 0, 0, SniperStatus.FAILED.text);
+	}
+
+	public void reportsInvalidMessage(FakeAuctionServer auction, String message) throws IOException {
+		logDriver.hasEntry(Matchers.containsString(message));
 	}
 
 	public void stop() {

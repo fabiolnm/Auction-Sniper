@@ -190,6 +190,7 @@ public class AuctionSniperEndToEndTest {
 		auction1.reportPrice(520, 21, "other bidder");
 		waitForAnotherAuctionEventToAssureSniperIgnoresFailedAuctionSubsequentEvents(); 
 		
+		application.reportsInvalidMessage(auction1, brokenMessage);
 		application.showsSniperHasFailed(auction1);
 	}
 
