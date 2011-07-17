@@ -27,10 +27,12 @@ public class AuctionMessageTranslator implements MessageListener {
 	public void processMessage(Chat chat, Message message) {
 		if (listener == null)
 			throw new Defect("AuctionEventListener not set");
+		String messageBody = message.getBody();
 		try {
-			translate(message.getBody());
+			translate(messageBody);
 		} catch (Exception e) {
 			listener.auctionFailed();
+			failureReporter.cannotTranslateMessage(sniperId, messageBody, e);
 		}
 	}
 	
